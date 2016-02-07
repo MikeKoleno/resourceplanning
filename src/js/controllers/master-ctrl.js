@@ -3,9 +3,9 @@
  */
 
 angular.module('RDash')
-    .controller('MasterCtrl', ['$scope', '$cookieStore', 'projectSrv', MasterCtrl]);
+    .controller('MasterCtrl', ['$scope', '$cookieStore', 'projectSrv', 'employeeSrv', MasterCtrl]);
 
-function MasterCtrl($scope, $cookieStore, projectSrv) {
+function MasterCtrl($scope, $cookieStore, projectSrv, employeeSrv) {
     /**
      * Sidebar Toggle & Cookie Control
      */
@@ -19,6 +19,7 @@ function MasterCtrl($scope, $cookieStore, projectSrv) {
         if (newValue >= mobileView) {
             if (angular.isDefined($cookieStore.get('toggle'))) {
                 $scope.toggle = ! $cookieStore.get('toggle') ? false : true;
+
             } else {
                 $scope.toggle = true;
             }
@@ -38,6 +39,18 @@ function MasterCtrl($scope, $cookieStore, projectSrv) {
         })
     };
     $scope.fetchProjects();
+
+    $scope.fetchEmployees = function () {
+        employeeSrv.fetch().then(function (response) {
+            $scope.employees = response.data.results;
+
+            if (!$scope.$$phase) {
+                $scope.$$digest();
+            }
+        })
+    };
+
+    $scope.fetchEmployees();
 
     $scope.toggleSidebar = function() {
         $scope.toggle = !$scope.toggle;
