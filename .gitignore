@@ -30,7 +30,6 @@ $RECYCLE.BIN/
 # Icon must ends with two \r.
 Icon
 
-
 # Thumbnails
 ._*
 
@@ -46,3 +45,6 @@ Icon
 
 # Bower components
 /src/components
+
+# Webstorm files
+.idea/*
