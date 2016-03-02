@@ -30,24 +30,20 @@ function MasterCtrl($scope, $cookieStore, projectSrv, employeeSrv) {
     });
 
     $scope.fetchProjects = function () {
-        projectSrv.fetch().then(function (response) {
-            $scope.projects = response.data.results;
-
-            if (!$scope.$$phase) {
-                $scope.$$digest();
-            }
-        })
+        $scope.projects = [];
     };
     $scope.fetchProjects();
 
     $scope.fetchEmployees = function () {
-        employeeSrv.fetch().then(function (response) {
-            $scope.employees = response.data.results;
+        employeeSrv.fetch(function (error, data) {
+            if (!error) {
+                $scope.employees = data.Items;
 
-            if (!$scope.$$phase) {
-                $scope.$$digest();
+                if (!$scope.$$phase) {
+                    $scope.$digest();
+                }
             }
-        })
+        });
     };
 
     $scope.fetchEmployees();

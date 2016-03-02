@@ -1,4 +1,6 @@
 var gulp = require('gulp'),
+    inject = require('gulp-inject'),
+    clean = require('gulp-clean'),
     usemin = require('gulp-usemin'),
     wrap = require('gulp-wrap'),
     connect = require('gulp-connect'),
@@ -8,99 +10,90 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     less = require('gulp-less'),
     rename = require('gulp-rename'),
+    templateCache = require('gulp-angular-templatecache'),
     minifyHTML = require('gulp-minify-html');
 
 var paths = {
     scripts: 'src/js/**/*.*',
-    styles: 'src/less/**/*.*',
+    styles: 'src/styles/**/*.*',
     images: 'src/img/**/*.*',
-    templates: 'src/templates/**/*.html',
+    templates: ['src/**/*.tpl.html', 'src/**/*.html', '!src/index.html'],
     index: 'src/index.html',
     bower_fonts: 'src/components/**/*.{ttf,woff,eof,svg}',
+    bower_scripts: 'src/components/**/*.min.js',
+    bower_styles: 'src/components/**/*.min.css'
 };
 
-/**
- * Handle bower components from index
- */
-gulp.task('usemin', function() {
-    return gulp.src(paths.index)
-        .pipe(usemin({
-            css: [minifyCss({keepSpecialComments: 0}), 'concat'],
-        }))
-        .pipe(gulp.dest('dist/'));
+gulp.task('clean', function () {
+    return gulp.src('dist/', {read: false})
+        .pipe(clean({force: true}));
 });
 
-/**
- * Copy assets
- */
-gulp.task('build-assets', ['copy-bower_fonts']);
+gulp.task('copy_bower_scripts', function () {
+    return gulp.src(paths.bower_scripts)
+        .pipe(gulp.dest('dist/components'));
+});
 
-gulp.task('copy-bower_fonts', function() {
+gulp.task('copy_bower_styles', function () {
+    return gulp.src(paths.bower_styles)
+        .pipe(gulp.dest('dist/components/'));
+});
+
+gulp.task('copy_bower_fonts', function () {
     return gulp.src(paths.bower_fonts)
-        .pipe(rename({
-            dirname: '/fonts'
-        }))
-        .pipe(gulp.dest('dist/lib'));
+        .pipe(gulp.dest('dist/components/'));
 });
 
-/**
- * Handle custom files
- */
-gulp.task('build-custom', ['custom-images', 'custom-js', 'custom-less', 'custom-templates']);
-
-gulp.task('custom-images', function() {
-    return gulp.src(paths.images)
-        .pipe(gulp.dest('dist/img'));
-});
-
-gulp.task('custom-js', function() {
+gulp.task('copy_scripts', function () {
     return gulp.src(paths.scripts)
-        .pipe(concat('dashboard.min.js'))
         .pipe(gulp.dest('dist/js'));
 });
 
-gulp.task('custom-less', function() {
+gulp.task('copy_styles', function () {
     return gulp.src(paths.styles)
         .pipe(less())
-        .pipe(gulp.dest('dist/css'));
+        .pipe(concat('resource-planning.css'))
+        .pipe(gulp.dest('dist/styles'));
 });
 
-gulp.task('custom-templates', function() {
+gulp.task('copy_assets', function () {
+    return gulp.src(paths.images)
+        .pipe(gulp.dest('dist/assets/images'));
+});
+
+gulp.task('templates', function () {
     return gulp.src(paths.templates)
-        .pipe(minifyHTML())
-        .pipe(gulp.dest('dist/templates'));
+        .pipe(templateCache({
+            module: 'RDash'
+        }))
+        .pipe(gulp.dest('dist/js'))
+        .pipe(connect.reload())
 });
 
-/**
- * Watch custom files
- */
+gulp.task('index', function () {
+    var target = gulp.src('/src/index.html');
+    var sources = gulp.src(['dist/**/*.min.js', '!dist/**/ui-bootstrap.min.js', 'dist/**/*.js', 'dist/**/*.min.css', 'dist/**/*.css'], {read: false});
+
+    return gulp.src(paths.index)
+        .pipe(concat('index.html'))
+        .pipe(inject(sources, {relative: true}))
+        .pipe(gulp.dest('./dist/'));
+});
+
+gulp.task('build-tasks', ['copy_bower_scripts', 'copy_bower_styles', 'copy_bower_fonts', 'copy_scripts', 'copy_styles', 'copy_assets', 'templates'], function () {
+    gulp.start(['index']);
+});
+
+gulp.task('build', ['clean'], function () {
+    return gulp.start(['build-tasks']);
+});
+
 gulp.task('watch', function() {
-    gulp.watch([paths.images], ['custom-images']);
-    gulp.watch([paths.styles], ['custom-less']);
-    gulp.watch([paths.scripts], ['custom-js']);
-    gulp.watch([paths.templates], ['custom-templates']);
-    gulp.watch([paths.index], ['usemin']);
+    gulp.watch([paths.images], ['build']);
+    gulp.watch([paths.styles], ['build']);
+    gulp.watch([paths.scripts], ['build']);
+    gulp.watch([paths.templates], ['build']);
+    gulp.watch([paths.index], ['build']);
 });
 
-/**
- * Live reload server
- */
-gulp.task('webserver', function() {
-    connect.server({
-        root: 'dist',
-        livereload: true,
-        port: 8888
-    });
-});
-
-gulp.task('livereload', function() {
-    gulp.src(['dist/**/*.*'])
-        .pipe(watch())
-        .pipe(connect.reload());
-});
-
-/**
- * Gulp tasks
- */
-gulp.task('build', ['usemin', 'build-assets', 'build-custom']);
-gulp.task('default', ['build', 'webserver', 'livereload', 'watch']);
+gulp.task('default', ['build', 'watch']);

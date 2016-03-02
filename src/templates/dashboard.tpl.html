@@ -1,0 +1,95 @@
+<div rd-resource-overview></div>
+<div class="row">
+    <div class="col-lg-6">
+        <rd-widget>
+            <rd-widget-header icon="fa-tasks" title="Projects">
+                <input type="text" placeholder="Search" class="form-control input-sm"/>
+            </rd-widget-header>
+            <rd-widget-body classes="medium no-padding">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Project Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="project in projects">
+                            <td>{{project.objectId}}</td>
+                            <td>{{project.name}}</td>
+                            <td>{{project.startDate.iso | date:MM-dd-yyyy}}</td>
+                            <td>{{project.endDate.iso | date:MM-dd-yyyy}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </rd-widget-body>
+            <rd-widget>
+    </div>
+    <div class="col-lg-6">
+        <rd-widget>
+            <rd-widget-header icon="fa-users" title="Employees">
+                <input type="text" placeholder="Search" class="form-control input-sm"/>
+            </rd-widget-header>
+            <rd-widget-body classes="medium no-padding">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="employee in employees track by $index">
+                            <td width="10%">{{($index + 1)}}</td>
+                            <td width="25%">{{employee.firstName['S']}}</td>
+                            <td width="25%">{{employee.lastName['S']}}</td>
+                            <td width="40%">{{employee.email['S']}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <rd-widget>
+            <rd-widget-header icon="fa-plus" title="Extras">
+                <button class="btn btn-sm btn-info">Button</button>
+            </rd-widget-header>
+            <rd-widget-body>
+                <div class="message">
+                    This is a standard message which will also work the ".no-padding" class, I can also <span
+                        class="error">be an error message!</span>
+                </div>
+                <hr/>
+                <div class="message">
+                    <a href="http://angular-ui.github.io/bootstrap/" target="_blank">UI Bootstrap</a> is included, so
+                    you can use <a href="#" tooltip="I'm a tooltip!">tooltips</a> and all of the other native Bootstrap
+                    JS components!
+                </div>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+    <div class="col-lg-6">
+        <rd-widget>
+            <rd-widget-header icon="fa-cog fa-spin" title="Loading Directive">
+                <a href="http://tobiasahlin.com/spinkit/" target="_blank">SpinKit</a>
+            </rd-widget-header>
+            <rd-widget-body>
+                <rd-loading></rd-loading>
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+</div>
+
+<h1>Hello There</h1>
