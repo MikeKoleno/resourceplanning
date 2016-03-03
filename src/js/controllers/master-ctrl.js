@@ -3,9 +3,9 @@
  */
 
 angular.module('RDash')
-    .controller('MasterCtrl', ['$scope', '$cookieStore', 'projectSrv', 'employeeSrv', MasterCtrl]);
+    .controller('MasterCtrl', ['$scope', '$state', '$cookieStore', 'projectSrv', 'employeeSrv', MasterCtrl]);
 
-function MasterCtrl($scope, $cookieStore, projectSrv, employeeSrv) {
+function MasterCtrl($scope, $state, $cookieStore, projectSrv, employeeSrv) {
     /**
      * Sidebar Toggle & Cookie Control
      */
@@ -29,28 +29,13 @@ function MasterCtrl($scope, $cookieStore, projectSrv, employeeSrv) {
 
     });
 
-    $scope.fetchProjects = function () {
-        $scope.projects = [];
-    };
-    $scope.fetchProjects();
-
-    $scope.fetchEmployees = function () {
-        employeeSrv.fetch(function (error, data) {
-            if (!error) {
-                $scope.employees = data.Items;
-
-                if (!$scope.$$phase) {
-                    $scope.$digest();
-                }
-            }
-        });
-    };
-
-    $scope.fetchEmployees();
-
     $scope.toggleSidebar = function() {
         $scope.toggle = !$scope.toggle;
         $cookieStore.put('toggle', $scope.toggle);
+    };
+
+    $scope.isActiveNav = function () {
+        return $state.current.name;
     };
 
     window.onresize = function() {

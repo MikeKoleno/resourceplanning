@@ -20,7 +20,21 @@ var paths = {
     templates: ['src/**/*.tpl.html', 'src/**/*.html', '!src/index.html'],
     index: 'src/index.html',
     bower_fonts: 'src/components/**/*.{ttf,woff,eof,svg}',
-    bower_scripts: 'src/components/**/*.min.js',
+    bower_scripts: [
+        'src/components/**/**/jquery.min.js',
+        'src/components/**/**/moment.min.js',
+        'src/components/**/angular.min.js',
+        'src/components/**/ui-bootstrap-tpls.min.js',
+        'src/components/**/angular-cookies.min.js',
+        'src/components/**/angular-local-storage.min.js',
+        'src/components/**/angular-ui-router.min.js',
+        'src/components/**/aws-sdk.min.js',
+        'src/components/**/bootstrap.min.js',
+        'src/components/**/src/calendar.js',
+        'src/components/**/dist/fullcalendar.min.js',
+        'src/components/**/dist/gcal.js',
+        'src/components/**/build/roundProgress.min.js'
+    ],
     bower_styles: 'src/components/**/*.min.css'
 };
 
@@ -72,7 +86,23 @@ gulp.task('templates', function () {
 
 gulp.task('index', function () {
     var target = gulp.src('/src/index.html');
-    var sources = gulp.src(['dist/**/*.min.js', '!dist/**/ui-bootstrap.min.js', 'dist/**/*.js', 'dist/**/*.min.css', 'dist/**/*.css'], {read: false});
+    var sources = gulp.src(['dist/components/**/**/jquery.min.js',
+        'dist/components/**/**/moment.min.js',
+        'dist/components/**/angular.min.js',
+        'dist/components/**/ui-bootstrap-tpls.min.js',
+        'dist/components/**/angular-cookies.min.js',
+        'dist/components/**/angular-local-storage.min.js',
+        'dist/components/**/angular-ui-router.min.js',
+        'dist/components/**/aws-sdk.min.js',
+        'dist/components/**/bootstrap.min.js',
+        'dist/components/**/**/calendar.js',
+        'dist/components/**/dist/fullcalendar.min.js',
+        'dist/components/**/dist/gcal.js',
+        'dist/components/**/build/roundProgress.min.js',
+        'dist/**/*.js',
+        'dist/**/*.min.css',
+        'dist/**/*.css'
+    ], {read: false});
 
     return gulp.src(paths.index)
         .pipe(concat('index.html'))
@@ -88,7 +118,7 @@ gulp.task('build', ['clean'], function () {
     return gulp.start(['build-tasks']);
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
     gulp.watch([paths.images], ['build']);
     gulp.watch([paths.styles], ['build']);
     gulp.watch([paths.scripts], ['build']);

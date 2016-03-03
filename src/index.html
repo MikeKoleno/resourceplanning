@@ -6,6 +6,7 @@
 
 	<title>Solstice People Planning</title>
     <!-- STYLES -->
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,200italic,300,300italic,400italic,900italic,900,700,600,600italic,700italic' rel='stylesheet' type='text/css'>
     <!-- inject:css -->
     <!-- endinject -->
     <!-- SCRIPTS -->
@@ -20,19 +21,19 @@
       <ul class="sidebar">
         <li class="sidebar-main">
           <a ng-click="toggleSidebar()">
-            People Planning
+            Solstice Staffing
             <span class="menu-icon glyphicon glyphicon-transfer"></span>
           </a>
         </li>
         <li class="sidebar-title"><span>NAVIGATION</span></li>
         <li class="sidebar-list">
-          <a href="#">Dashboard <span class="menu-icon fa fa-tachometer"></span></a>
+          <a href="#" ng-class="{'active' : isActiveNav() === 'dashboard'}">Dashboard <span class="menu-icon fa fa-tachometer"></span></a>
         </li>
         <li class="sidebar-list">
-          <a href="#/tables">Projects <span class="menu-icon fa fa-table"></span></a>
+          <a href="#/projects" ng-class="{'active' : isActiveNav() === 'projects'}">Projects <span class="menu-icon fa fa-table"></span></a>
         </li>
         <li class="sidebar-list">
-          <a href="#/tables">People<span class="menu-icon fa fa-table"></span></a>
+          <a href="#/people" ng-class="{'active' : isActiveNav() === 'people'}">People<span class="menu-icon fa fa-table"></span></a>
         </li>
       </ul>
 
