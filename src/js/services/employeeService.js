@@ -8,10 +8,7 @@ function employeeService(resourcePlanner, localStorageService) {
             var params = {
                 "TableName": "employee"
             };
-            resourcePlanner.scan(params, function (error, data) {
-                localStorageService.set('employees', data);
-                return callback(error, data);
-            });
+            resourcePlanner.scan(params, callback);
         },
         fetchDCEs: function (callback) {
             var params = {

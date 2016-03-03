@@ -1,19 +1,21 @@
 angular
     .module('RDash')
-    .directive('rdResourceOverview', ['localStorageService', rdResourceOverview]);
+    .directive('rdResourceOverview', ['employeeSrv', rdResourceOverview]);
 
 
-function rdResourceOverview(localStorageService) {
+function rdResourceOverview() {
     var directive = {
         restrict: 'AE',
         templateUrl: 'templates/resource-overview.tpl.html',
-        controller: function ($scope, localStorageService) {
+        controller: function ($scope, employeeSrv) {
             (function () {
                 $scope.employeeCount = $scope.projectsCount = 0;
 
-                if (localStorageService.get('employees') !== undefined) {
-                    $scope.employeeCount = localStorageService.get('employees').ScannedCount;
-                }
+                employeeSrv.fetch(function (error, data) {
+                    if (!error) {
+                        $scope.employeeCount = data.ScannedCount;
+                    }
+                });
             })();
         }
     };

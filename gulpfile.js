@@ -39,40 +39,40 @@ var paths = {
 };
 
 gulp.task('clean', function () {
-    return gulp.src('dist/', {read: false})
+    return gulp.src('www/', {read: false})
         .pipe(clean({force: true}));
 });
 
 gulp.task('copy_bower_scripts', function () {
     return gulp.src(paths.bower_scripts)
-        .pipe(gulp.dest('dist/components'));
+        .pipe(gulp.dest('www/components'));
 });
 
 gulp.task('copy_bower_styles', function () {
     return gulp.src(paths.bower_styles)
-        .pipe(gulp.dest('dist/components/'));
+        .pipe(gulp.dest('www/components/'));
 });
 
 gulp.task('copy_bower_fonts', function () {
     return gulp.src(paths.bower_fonts)
-        .pipe(gulp.dest('dist/components/'));
+        .pipe(gulp.dest('www/components/'));
 });
 
 gulp.task('copy_scripts', function () {
     return gulp.src(paths.scripts)
-        .pipe(gulp.dest('dist/js'));
+        .pipe(gulp.dest('www/js'));
 });
 
 gulp.task('copy_styles', function () {
     return gulp.src(paths.styles)
         .pipe(less())
         .pipe(concat('resource-planning.css'))
-        .pipe(gulp.dest('dist/styles'));
+        .pipe(gulp.dest('www/styles'));
 });
 
 gulp.task('copy_assets', function () {
     return gulp.src(paths.images)
-        .pipe(gulp.dest('dist/assets/images'));
+        .pipe(gulp.dest('www/assets/images'));
 });
 
 gulp.task('templates', function () {
@@ -80,34 +80,34 @@ gulp.task('templates', function () {
         .pipe(templateCache({
             module: 'RDash'
         }))
-        .pipe(gulp.dest('dist/js'))
+        .pipe(gulp.dest('www/js'))
         .pipe(connect.reload())
 });
 
 gulp.task('index', function () {
     var target = gulp.src('/src/index.html');
-    var sources = gulp.src(['dist/components/**/**/jquery.min.js',
-        'dist/components/**/**/moment.min.js',
-        'dist/components/**/angular.min.js',
-        'dist/components/**/ui-bootstrap-tpls.min.js',
-        'dist/components/**/angular-cookies.min.js',
-        'dist/components/**/angular-local-storage.min.js',
-        'dist/components/**/angular-ui-router.min.js',
-        'dist/components/**/aws-sdk.min.js',
-        'dist/components/**/bootstrap.min.js',
-        'dist/components/**/**/calendar.js',
-        'dist/components/**/dist/fullcalendar.min.js',
-        'dist/components/**/dist/gcal.js',
-        'dist/components/**/build/roundProgress.min.js',
-        'dist/**/*.js',
-        'dist/**/*.min.css',
-        'dist/**/*.css'
+    var sources = gulp.src(['www/components/**/**/jquery.min.js',
+        'www/components/**/**/moment.min.js',
+        'www/components/**/angular.min.js',
+        'www/components/**/ui-bootstrap-tpls.min.js',
+        'www/components/**/angular-cookies.min.js',
+        'www/components/**/angular-local-storage.min.js',
+        'www/components/**/angular-ui-router.min.js',
+        'www/components/**/aws-sdk.min.js',
+        'www/components/**/bootstrap.min.js',
+        'www/components/**/**/calendar.js',
+        'www/components/**/dist/fullcalendar.min.js',
+        'www/components/**/dist/gcal.js',
+        'www/components/**/build/roundProgress.min.js',
+        'www/**/*.js',
+        'www/**/*.min.css',
+        'www/**/*.css'
     ], {read: false});
 
     return gulp.src(paths.index)
         .pipe(concat('index.html'))
         .pipe(inject(sources, {relative: true}))
-        .pipe(gulp.dest('./dist/'));
+        .pipe(gulp.dest('./www/'));
 });
 
 gulp.task('build-tasks', ['copy_bower_scripts', 'copy_bower_styles', 'copy_bower_fonts', 'copy_scripts', 'copy_styles', 'copy_assets', 'templates'], function () {
