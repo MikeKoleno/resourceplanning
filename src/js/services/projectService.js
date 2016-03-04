@@ -1,16 +1,40 @@
 angular
     .module('RDash.Services')
-    .service('projectSrv', ['$http', projectService]);
+    .service('projectSrv', ['resourcePlanner', projectService]);
 
-function projectService($http) {
+function projectService(resourcePlanner) {
     return {
-        fetch: function () {
-            $http.defaults.headers.common['X-Parse-REST-API-Key'] = 'QyGDs2EFoY9AiQRGnM0h1t23l67MNEmd8JV6Gsqq';
-            $http.defaults.headers.common['X-Parse-Application-Id'] = 'MTQ2NxMAdMl0wJzMLzdKj37bbpPMUWwSkX96SaSC';
-            return $http.get("https://api.parse.com/1/classes/Project?include=Client");
+        fetchAllocation: function (email, callback) {
+            var params = {
+                TableName: "projectResource",
+                ScanFilter: {
+                    email: {
+                        ComparisonOperator: 'EQ',
+                        AttributeValueList: [
+                            {
+                                S: email
+                            }
+                        ]
+                    }
+                }
+            };
+            resourcePlanner.scan(params, callback);
         },
-        fetchCount: function () {
-            return $http.get("https://api.parse.com/1/classes/Project?count=1&limit=0");
+        fetchProjectDetails: function (projectId, callback) {
+            var params = {
+                TableName: "projects",
+                ScanFilter: {
+                    id: {
+                        ComparisonOperator:  'EQ',
+                        AttributeValueList: [
+                            {
+                                N: projectId
+                            }
+                        ]
+                    }
+                }
+            };
+            resourcePlanner.scan(params, callback);
         }
-    }
-}
+    };
+};

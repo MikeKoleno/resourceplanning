@@ -20,45 +20,59 @@ var paths = {
     templates: ['src/**/*.tpl.html', 'src/**/*.html', '!src/index.html'],
     index: 'src/index.html',
     bower_fonts: 'src/components/**/*.{ttf,woff,eof,svg}',
-    bower_scripts: 'src/components/**/*.min.js',
+    bower_scripts: [
+        'src/components/**/**/jquery.min.js',
+        'src/components/**/**/moment.min.js',
+        'src/components/**/angular.min.js',
+        'src/components/**/ui-bootstrap-tpls.min.js',
+        'src/components/**/angular-cookies.min.js',
+        'src/components/**/angular-local-storage.min.js',
+        'src/components/**/angular-ui-router.min.js',
+        'src/components/**/aws-sdk.min.js',
+        'src/components/**/bootstrap.min.js',
+        'src/components/**/src/calendar.js',
+        'src/components/**/dist/fullcalendar.min.js',
+        'src/components/**/dist/gcal.js',
+        'src/components/**/build/roundProgress.min.js'
+    ],
     bower_styles: 'src/components/**/*.min.css'
 };
 
 gulp.task('clean', function () {
-    return gulp.src('dist/', {read: false})
+    return gulp.src('www/', {read: false})
         .pipe(clean({force: true}));
 });
 
 gulp.task('copy_bower_scripts', function () {
     return gulp.src(paths.bower_scripts)
-        .pipe(gulp.dest('dist/components'));
+        .pipe(gulp.dest('www/components'));
 });
 
 gulp.task('copy_bower_styles', function () {
     return gulp.src(paths.bower_styles)
-        .pipe(gulp.dest('dist/components/'));
+        .pipe(gulp.dest('www/components/'));
 });
 
 gulp.task('copy_bower_fonts', function () {
     return gulp.src(paths.bower_fonts)
-        .pipe(gulp.dest('dist/components/'));
+        .pipe(gulp.dest('www/components/'));
 });
 
 gulp.task('copy_scripts', function () {
     return gulp.src(paths.scripts)
-        .pipe(gulp.dest('dist/js'));
+        .pipe(gulp.dest('www/js'));
 });
 
 gulp.task('copy_styles', function () {
     return gulp.src(paths.styles)
         .pipe(less())
         .pipe(concat('resource-planning.css'))
-        .pipe(gulp.dest('dist/styles'));
+        .pipe(gulp.dest('www/styles'));
 });
 
 gulp.task('copy_assets', function () {
     return gulp.src(paths.images)
-        .pipe(gulp.dest('dist/assets/images'));
+        .pipe(gulp.dest('www/assets/images'));
 });
 
 gulp.task('templates', function () {
@@ -66,18 +80,34 @@ gulp.task('templates', function () {
         .pipe(templateCache({
             module: 'RDash'
         }))
-        .pipe(gulp.dest('dist/js'))
+        .pipe(gulp.dest('www/js'))
         .pipe(connect.reload())
 });
 
 gulp.task('index', function () {
     var target = gulp.src('/src/index.html');
-    var sources = gulp.src(['dist/**/*.min.js', '!dist/**/ui-bootstrap.min.js', 'dist/**/*.js', 'dist/**/*.min.css', 'dist/**/*.css'], {read: false});
+    var sources = gulp.src(['www/components/**/**/jquery.min.js',
+        'www/components/**/**/moment.min.js',
+        'www/components/**/angular.min.js',
+        'www/components/**/ui-bootstrap-tpls.min.js',
+        'www/components/**/angular-cookies.min.js',
+        'www/components/**/angular-local-storage.min.js',
+        'www/components/**/angular-ui-router.min.js',
+        'www/components/**/aws-sdk.min.js',
+        'www/components/**/bootstrap.min.js',
+        'www/components/**/**/calendar.js',
+        'www/components/**/dist/fullcalendar.min.js',
+        'www/components/**/dist/gcal.js',
+        'www/components/**/build/roundProgress.min.js',
+        'www/**/*.js',
+        'www/**/*.min.css',
+        'www/**/*.css'
+    ], {read: false});
 
     return gulp.src(paths.index)
         .pipe(concat('index.html'))
         .pipe(inject(sources, {relative: true}))
-        .pipe(gulp.dest('./dist/'));
+        .pipe(gulp.dest('./www/'));
 });
 
 gulp.task('build-tasks', ['copy_bower_scripts', 'copy_bower_styles', 'copy_bower_fonts', 'copy_scripts', 'copy_styles', 'copy_assets', 'templates'], function () {
@@ -88,7 +118,7 @@ gulp.task('build', ['clean'], function () {
     return gulp.start(['build-tasks']);
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
     gulp.watch([paths.images], ['build']);
     gulp.watch([paths.styles], ['build']);
     gulp.watch([paths.scripts], ['build']);

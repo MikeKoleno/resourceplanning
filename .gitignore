@@ -38,7 +38,7 @@ Icon
 .Trashes
 
 # Dist Directory
-/dist
+/www
 
 # Node modules
 /node_modules
@@ -48,3 +48,4 @@ Icon
 
 # Webstorm files
 .idea/*
+**/*.xml

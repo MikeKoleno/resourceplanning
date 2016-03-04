@@ -11,14 +11,21 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
 
         // Application routes
         $stateProvider
-            .state('index', {
+            .state('dashboard', {
                 url: '/',
                 templateProvider: function ($templateCache) {
                     return $templateCache.get('templates/dashboard.tpl.html');
+                },
+                controller: 'DashboardController'
+            })
+            .state('projects', {
+                url: '/projects',
+                templateProvider: function ($templateCache) {
+                    return $templateCache.get('templates/tables.tpl.html');
                 }
             })
-            .state('tables', {
-                url: '/tables',
+            .state('people', {
+                url: '/people',
                 templateProvider: function ($templateCache) {
                     return $templateCache.get('templates/tables.tpl.html');
                 }
