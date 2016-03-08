@@ -1,7 +1,7 @@
 angular.module("RDash")
     .controller("CreateModalController", ["$scope", "$uibModalInstance", "employeeSrv", "projectSrv", "utilitySrv", "modalType", "Roles", "ngNotify", createModalController]);
 
-function createModalController($scope, $uibModalInstance, employeeSrv, projectSrv, utilitySrv, modalType, Roles) {
+function createModalController($scope, $uibModalInstance, employeeSrv, projectSrv, utilitySrv, modalType, Roles, ngNotify) {
     (function () {
         $scope.modalType = modalType;
         $scope.roles = Roles;
@@ -32,7 +32,7 @@ function createModalController($scope, $uibModalInstance, employeeSrv, projectSr
         };
         employeeSrv.assignRolesToEmployee(params, function (error, data) {
             if (error) {
-                ngNotify.set(error.message, 'error');
+                ngNotify.set("There seems an issue with the request. Please try again", 'error');
             } else {
                 $uibModalInstance.close('employee created');
             }
@@ -66,20 +66,36 @@ function createModalController($scope, $uibModalInstance, employeeSrv, projectSr
                 lastName: {
                     S: $scope.employee.lastName
                 },
-                interests: {
-                    L: interests
-                },
                 location: {
                     S: $scope.employee.location
-                },
-                skills: {
-                    L: skills
-                },
-                travelPreferences: {
-                    S: $scope.employee.travelPreference
+                }
+            },
+            ConditionExpression: "#email <> :email",
+            ExpressionAttributeNames: {
+                "#email": "email"
+            },
+            ExpressionAttributeValues: {
+                ":email": {
+                    S: $scope.employee.email
                 }
             }
         };
+
+        if (interests.length !== 0) {
+            params.Item['interests'] = {
+                L: interests
+            };
+        }
+        if (skills.length !== 0) {
+            params.Item['skills'] = {
+                L: skills
+            };
+        }
+        if (!utilitySrv.isEmpty($scope.employee.travelPreference)) {
+            params.Item['travelPreferences'] = {
+                S: $scope.employee.travelPreference
+            };
+        }
         if (utilitySrv.isEmpty($scope.employee.firstName)
             || utilitySrv.isEmpty($scope.employee.lastName)
             || utilitySrv.isEmpty($scope.employee.email)
@@ -88,7 +104,11 @@ function createModalController($scope, $uibModalInstance, employeeSrv, projectSr
         }
         employeeSrv.createEmployee(params, function (error, data) {
             if (error) {
-                console.warn(error, error.message);
+                if (error.message === 'The conditional request failed') {
+                    ngNotify.set("An employee with this email address already exists.", 'error');
+                } else {
+                    ngNotify.set("There seems an issue with the request. Please try again", 'error');
+                }
             } else {
                 assignRoleToEmployee($scope.employee.email, $scope.employee.roles);
             }
