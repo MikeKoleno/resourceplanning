@@ -27,7 +27,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="employee in employees | filter:dashboardSearchKeyword | orderBy:predicate:reverse">
+                    <tr ng-repeat="employee in employees | filter:dashboardSearchKeyword | orderBy:predicate2:reverse | orderBy: predicate1:reverse">
                         <td width="100px" class="employee-card">
                             {{employee.firstName['S']}} {{employee.lastName['S']}}
                         </td>

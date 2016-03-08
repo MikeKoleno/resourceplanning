@@ -1,7 +1,7 @@
 angular.module("RDash")
-    .controller("DashboardController", ["$scope", "$compile", "employeeSrv", "projectSrv", "utilitySrv", DashboardController]);
+    .controller("DashboardController", ["$scope", "employeeSrv", "projectSrv", "utilitySrv", DashboardController]);
 
-function DashboardController($scope, $compile, employeeSrv, projectSrv, utilitySrv) {
+function DashboardController($scope, employeeSrv, projectSrv, utilitySrv) {
 
     var fetchAllocation = function ($index) {
         angular.element('.fc-bg table tbody').append("<tr></tr>");
@@ -53,7 +53,7 @@ function DashboardController($scope, $compile, employeeSrv, projectSrv, utilityS
                 var i = 0;
                 angular.forEach(employees, function (employee) {
                     employeeSrv.fetchEmployeeRoles(employee.email['S'], function (error, data) {
-                        if (!error && data.Items.length !== 1 || data.Items[0].roleId['N'] !== '1') {
+                        if (!error && data.Items.length !== 1 || data.Items[0].roles['NS'][0] !== '1') {
                             $scope.employees.push(employee);
                             fetchAllocation(i);
                             i++;
@@ -84,12 +84,19 @@ function DashboardController($scope, $compile, employeeSrv, projectSrv, utilityS
 
     (function () {
         $scope.dashboardSearch = '';
-        $scope.predicate = "allocations";
+        $scope.predicate1 = "allocations";
+        $scope.predicate2 = "firstName['S']";
         $scope.reverse = false;
         $scope.eventSources = [];
         $scope.employees = [];
 
         fetchWeekDays();
+
+        $scope.$on("refresh", function (event, message) {
+            if (message === 'dashboard') {
+                fetchWeekDays();
+            }
+        });
     })();
 
     $scope.getColorByAllocation = function (allocation) {

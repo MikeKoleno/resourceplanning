@@ -1,19 +1,39 @@
+@import "variables";
+
 body, div, p, span, h1, ul, li, b, a, button, input {
   font-family: 'Source Sans Pro', sans-serif;
 }
 
+#sidebar-wrapper {
+  background: @primary-shade-color;
+}
+
 ul.sidebar {
+  .sidebar-main {
+    height: 60px;
+    a {
+      background: @secondary-color;
+    }
+  }
+  .sidebar-title {
+    color: white;
+  }
   .sidebar-list {
     a {
       border-left: 3px solid transparent;
+      color: white;
       &.active {
-        border-left: 3px solid #e99d1a !important;
+        border-left: 3px solid @secondary-color !important;
         color: white;
-        background: #2d3e63;
+        background: @primary-color;
+        span.fa {
+          color: @secondary-color;
+        }
       }
       &:hover {
         border-left: 3px solid transparent;
         text-indent: 25px;
+        background: @primary-color;
       }
     }
   }
@@ -65,4 +85,204 @@ ul.sidebar {
       color: white;
     }
   }
+}
+
+.user {
+  .item {
+    width: 100px !important;
+    a {
+      background: @secondary-color;
+      color: white !important;
+      height: 100%;
+      font-size: 16px !important;
+      padding-top: 7px;
+      i {
+        width: 100%;
+        line-height: normal !important;
+        font-size: 16px !important;
+      }
+    }
+    box-shadow: 0 0 5px 0 #888888;
+    margin-right: 10px;
+  }
+}
+
+input {
+  &[type="text"], &[type="email"], &[type="tel"] {
+    height: 36px;
+    box-shadow: none;
+    border: 0;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    border-bottom: 2px solid #ddd;
+    color: @primary-text-color;
+    outline: none;
+    &:hover, &:active, &:focus {
+      box-shadow: none;
+    }
+    &:focus {
+      border-bottom-color: @teritary-color !important;
+    }
+  }
+}
+
+textarea {
+  box-shadow: none !important;
+  border: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent;
+  border-bottom: 2px solid #ddd !important;
+  color: @primary-text-color !important;
+  outline: none;
+  &:hover, &:active, &:focus {
+    box-shadow: none;
+  }
+  &:focus {
+    border-bottom-color: @teritary-color !important;
+  }
+}
+
+a, button {
+  outline: none;
+  &:active, &:focus, &:hover {
+    outline: none;
+  }
+}
+
+.dropdown {
+  .btn {
+    width: 100%;
+    text-align: left;
+    border: 0;
+    border-radius: 0;
+    border-bottom: 2px solid #ddd;
+    box-shadow: none !important;
+    font-size: 15px;
+    padding-left: 0;
+    outline: none !important;
+    height: 36px;
+    i {
+      float: right;
+    }
+    &:hover, &:active, &:focus {
+      box-shadow: none;
+      outline: none;
+      border-bottom-color: @teritary-color;
+    }
+    &:active {
+    }
+  }
+  .dropdown-menu {
+    width: 100%;
+    a {
+      color: @primary-text-color;
+      font-size: 15px;
+    }
+  }
+}
+
+// Modal Styles
+.modal-header {
+  .modal-title {
+    font-size: 24px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: @primary-text-color;
+  }
+  a {
+    font-size: 24px;
+    color: @secondary-color;
+  }
+}
+
+.modal-body {
+  font-size: 15px;
+  color: @primary-text-color;
+  input {
+    font-size: 15px;
+  }
+  .submit-button {
+    max-width: 350px;
+    font-size: 18px;
+    margin: auto;
+    margin-bottom: 15px;
+    background: @secondary-color;
+    color: white;
+  }
+  .cancel-button {
+    font-size: 18px;
+    color: @primary-color;
+  }
+}
+.help-text {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: @teritary-color;
+}
+
+.checkbox-btn-group {
+  display: block;
+  border: 0;
+  box-shadow: none;
+  .checkbox-btn {
+    color: @primary-text-color;
+    background: transparent;
+    font-weight: 400;
+    padding-left: 30px;
+    margin-bottom: 0;
+    text-align: left;
+    font-size: 15px;
+    white-space: normal;
+    word-break: break-all;
+    &:before {
+      content: '';
+      width: 22px;
+      height: 22px;
+      background: white;
+      border: 2px solid #ddd;
+      position: absolute;
+      left: 0;
+      padding-left: 2px;
+    }
+    &.active, &:focus, &:active {
+      color: @primary-text-color;
+      font-weight: 400;
+      box-shadow: none;
+      &:before {
+        content: '\e013';
+        font-family: 'Glyphicons Halflings';
+        font-size: 14px;
+        font-weight: 400;
+        color: @teritary-color;
+      }
+    }
+  }
+}
+
+//form error styles
+.form-group {
+  &.error {
+    label {
+      color: @error-state-color;
+    }
+    input {
+      border-bottom-color: @error-state-color;
+      color: @error-state-color;
+    }
+    button {
+      border-bottom-color: @error-state-color;
+    }
+  }
+  .error-text {
+    color: @error-state-color;
+    font-size: 13px;
+  }
+}
+
+.error {
+  color: @error-state-color;
 }

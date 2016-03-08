@@ -44,22 +44,18 @@
       <div class="page-content">
 
         <!-- Header Bar -->
-        <div class="row header">
+        <div class="row header" ng-controller="HeaderController">
           <div class="col-xs-12">
             <div class="user pull-right">
-              <div class="item dropdown">
-               <a href="#" class="dropdown-toggle">
-                  <i class="fa fa-bell-o"></i>
+              <div class="item">
+               <a href="#" ng-click="openEmployeeCreateModal()">
+                 <i class="fa fa-plus"></i> Employee
+               </a>
+              </div>
+              <div class="item">
+                <a href="#" ng-click="openProjectCreateModal()">
+                  <i class="fa fa-plus"></i> Project
                 </a>
-                <ul class="dropdown-menu dropdown-menu-right">
-                  <li class="dropdown-header">
-                    Notifications
-                  </li>
-                  <li class="divider"></li>
-                  <li>
-                    <a href="#">Server Down!</a>
-                  </li>
-                </ul>
               </div>
             </div>
             <div class="meta">
