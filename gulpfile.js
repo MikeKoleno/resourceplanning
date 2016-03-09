@@ -22,7 +22,6 @@ var paths = {
     bower_fonts: 'src/components/**/*.{ttf,woff,eof,svg}',
     bower_scripts: [
         'src/components/**/**/jquery.min.js',
-        'src/components/**/**/moment.min.js',
         'src/components/**/angular.min.js',
         'src/components/**/ui-bootstrap-tpls.min.js',
         'src/components/**/angular-cookies.min.js',
@@ -30,10 +29,8 @@ var paths = {
         'src/components/**/angular-ui-router.min.js',
         'src/components/**/aws-sdk.min.js',
         'src/components/**/bootstrap.min.js',
-        'src/components/**/src/calendar.js',
-        'src/components/**/dist/fullcalendar.min.js',
-        'src/components/**/dist/gcal.js',
-        'src/components/**/build/roundProgress.min.js'
+        'src/components/**/build/roundProgress.min.js',
+        'src/components/**/dist/ng-notify.min.js'
     ],
     bower_styles: 'src/components/**/*.min.css'
 };
@@ -87,7 +84,6 @@ gulp.task('templates', function () {
 gulp.task('index', function () {
     var target = gulp.src('/src/index.html');
     var sources = gulp.src(['www/components/**/**/jquery.min.js',
-        'www/components/**/**/moment.min.js',
         'www/components/**/angular.min.js',
         'www/components/**/ui-bootstrap-tpls.min.js',
         'www/components/**/angular-cookies.min.js',
@@ -95,10 +91,8 @@ gulp.task('index', function () {
         'www/components/**/angular-ui-router.min.js',
         'www/components/**/aws-sdk.min.js',
         'www/components/**/bootstrap.min.js',
-        'www/components/**/**/calendar.js',
-        'www/components/**/dist/fullcalendar.min.js',
-        'www/components/**/dist/gcal.js',
         'www/components/**/build/roundProgress.min.js',
+        'www/components/**/dist/ng-notify.min.js',
         'www/**/*.js',
         'www/**/*.min.css',
         'www/**/*.css'

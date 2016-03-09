@@ -5,16 +5,51 @@
         Employee Available Allocation
     </div>
     <div class="row">
-        <div class="pull-left employee-list">
-            <div class="employee-space"></div>
-            <div ng-repeat="employee in employees">
-                <div class="employee-card">
-                    <span>{{employee.firstName['S']}} {{employee.lastName['S']}}</span>
-                </div>
-            </div>
-        </div>
         <div class="pull-left calendar-list">
-            <div ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="myCalendar"></div>
+            <div class="row">
+                <div class="pull-right prev-next-btns">
+                    <button class="btn green" ng-click="showPrevDates()">
+                        <i class="fa fa-chevron-left"></i>
+                    </button>
+                    <button class="btn green" ng-click="showNextDates()">
+                        <i class="fa fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="pull-right">
+                    <input type="text" class="form-control dashboard-search" ng-model="dashboardSearchKeyword"
+                           placeholder="Search By Name">
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <td></td>
+                        <td ng-repeat="eachDate in dates">{{eachDate | date: 'MM/dd'}}</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="employee in employees | filter:dashboardSearchKeyword | orderBy:predicate2:reverse | orderBy: predicate1:reverse">
+                        <td width="100px" class="employee-card">
+                            {{employee.firstName['S']}} {{employee.lastName['S']}}
+                        </td>
+                        <td ng-repeat="allocation in employee.allocations track by $index">
+                            <span class="allocation-value">{{allocation}}</span>
+                            <div
+                                round-progress
+                                max="100"
+                                current="allocation"
+                                color="{{getColorByAllocation(allocation)}}"
+                                bgcolor="#eaeaea"
+                                radius="30"
+                                stroke="5"
+                                clockwise="true"
+                                duration="800"
+                                animation="easeInOutQuart"
+                                animation-delay="0"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

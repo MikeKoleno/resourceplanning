@@ -1,0 +1,72 @@
+<div class="modal-header row">
+    <h3 class="modal-title col-lg-11">Create {{modalType}}</h3>
+    <a href class="col-lg-1" ng-click="closeModal()">
+        <i class="fa fa-times"></i>
+    </a>
+</div>
+<div class="modal-body">
+    <form name="employeeForm" novalidate>
+        <div class="row">
+            <div class="form-group col-lg-6" ng-class="{'error': employeeForm.$submitted && employeeForm.firstName.$error.required}">
+                <label for="createFirstName">First Name</label>
+                <input type="text" ng-model="employee.firstName" name="firstName" class="form-control" id="createFirstName" placeholder="First Name" required>
+                <span class="error-text" ng-show="employeeForm.$submitted && employeeForm.firstName.$error.required">First Name is required.</span>
+            </div>
+            <div class="form-group col-lg-6" ng-class="{'error': employeeForm.$submitted && employeeForm.lastName.$error.required}">
+                <label for="createLastName">Last Name</label>
+                <input type="text" ng-model="employee.lastName" name="lastName" class="form-control" id="createLastName" placeholder="Last Name" required>
+                <span class="error-text" ng-show="employeeForm.$submitted && employeeForm.lastName.$error.required">First Name is required.</span>
+            </div>
+            <div class="form-group col-lg-7" ng-class="{'error': employeeForm.$submitted && (employeeForm.email.$error.required || employeeForm.email.$error.email)}">
+                <label for="createEmail">Email Address</label>
+                <input type="email" ng-model="employee.email" name="email" class="form-control" id="createEmail" placeholder="Email" required>
+                <span class="error-text" ng-show="employeeForm.$submitted && employeeForm.email.$error.required">Email Address is required.</span>
+                <span class="error-text" ng-show="employeeForm.$submitted && employeeForm.email.$error.email">This is not a valid email.</span>
+            </div>
+            <div class="form-group col-lg-5">
+                <label>Location</label>
+                <div class="btn-group btn-block" uib-dropdown ng-init="employee.location= 'Chicago, USA'">
+                    <button type="button" class="btn form-control" uib-dropdown-toggle>
+                        {{employee.location}} <i class="fa fa-chevron-down"></i>
+                    </button>
+                    <ul uib-dropdown-menu role="menu">
+                        <li role="menuitem"><a href="#" ng-mousedown="employee.location= 'Chicago, USA'">Chicago, USA</a></li>
+                        <li role="menuitem"><a href="#" ng-mousedown="employee.location= 'New York, USA'">New York, USA</a></li>
+                        <li role="menuitem"><a href="#" ng-mousedown="employee.location= 'Buenos Aires, AR'">Buenos Aires, AR</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="form-group col-lg-12">
+                <label>Travel Preference</label>
+                <div class="btn-group checkbox-btn-group form-control row">
+                    <label class="btn checkbox-btn col-lg-6" ng-model="employee.travelPreference" uib-btn-radio="'Road Warrior'">Road Warrior</label>
+                    <label class="btn checkbox-btn col-lg-6" ng-model="employee.travelPreference" uib-btn-radio="'Occasional Travel'">Occasional Travel</label>
+                    <label class="btn checkbox-btn col-lg-6" ng-model="employee.travelPreference" uib-btn-radio="'Only If Absolutely Needed'">Only If Absolutely Needed</label>
+                    <label class="btn checkbox-btn col-lg-6" ng-model="employee.travelPreference" uib-btn-radio="'I Simply Can\'t'">I Simply Can't</label>
+                </div>
+            </div>
+            <div class="form-group col-lg-12">
+                <label for="createInterests">Interests</label>
+                <textarea id="createInterests" ng-model="employee.interests" class="form-control" placeholder="List all interests separated by comma"></textarea>
+            </div>
+            <div class="form-group col-lg-12">
+                <label for="createSkills">Skills</label>
+                <textarea id="createSkills" ng-model="employee.skills" class="form-control" placeholder="List all skills separated by comma"></textarea>
+            </div>
+            <div class="form-group col-lg-12">
+                <label ng-class="{'error': employeeForm.$submitted && isRolesNotSelected()}">Roles</label>
+                <i class="help-text">Check all that apply</i>
+                <span class="error-text" ng-show="employeeForm.$submitted && isRolesNotSelected()">Please select roles.</span>
+                <div class="btn-group checkbox-btn-group form-control">
+                    <div class="row">
+                        <label class="btn checkbox-btn col-lg-6" ng-model="employee.roles[$index]" ng-repeat="employeeRole in roles" uib-btn-checkbox>{{employeeRole}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-lg-12 text-center">
+                <button type="submit" class="btn from-control submit-button btn-block" ng-mousedown="createEmployee()">SUBMIT</button>
+                <a href class="cancel-button" ng-click="closeModal()">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>

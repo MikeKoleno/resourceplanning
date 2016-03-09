@@ -12,6 +12,9 @@ function resourcePlannerService() {
     return {
         scan: function (params, callback) {
             planner.scan(params, callback);
+        },
+        putItem: function (params, callback) {
+            planner.putItem(params, callback);
         }
     };
 };

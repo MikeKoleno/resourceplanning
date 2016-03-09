@@ -1,21 +1,18 @@
 angular.module("RDash")
-    .controller("DashboardController", ["$scope", "$compile", "employeeSrv", "projectSrv", "utilitySrv", DashboardController]);
+    .controller("DashboardController", ["$scope", "employeeSrv", "projectSrv", "utilitySrv", DashboardController]);
 
-function DashboardController($scope, $compile, employeeSrv, projectSrv, utilitySrv) {
+function DashboardController($scope, employeeSrv, projectSrv, utilitySrv) {
 
     var fetchAllocation = function ($index) {
         angular.element('.fc-bg table tbody').append("<tr></tr>");
         projectSrv.fetchAllocation($scope.employees[$index].email['S'], function (error, data) {
             if (!error) {
                 var projectsResourceData = data.Items;
-                var allocation = 0;
-                $scope.allocationInWeek = [0, 0, 0, 0, 0, 0, 0];
+                $scope.employees[$index].allocations = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100];
                 if (projectsResourceData.length !== 0) {
                     angular.forEach(projectsResourceData, function (eachProjectResource) {
                         findAllocationByWeek(eachProjectResource, $index);
                     });
-                } else {
-                    populateCalendarWithAllocations($scope.allocationInWeek, $index);
                 }
             }
         });
@@ -27,42 +24,24 @@ function DashboardController($scope, $compile, employeeSrv, projectSrv, utilityS
                 var projectDetails = data.Items[0];
                 var endDate = new Date(projectDetails.endDate['S']);
                 endDate.setHours(0, 0, 0, 0);
-                $scope.weekStartDate.setHours(0, 0, 0, 0);
-                $scope.weekEndDate.setHours(0, 0, 0, 0);
 
-                for (var date = $scope.weekStartDate,i = 0 ; date <= $scope.weekEndDate; date = new Date(date.setDate(date.getDate() + 1)), i++) {
-                    if (endDate >= date) {
-                        $scope.allocationInWeek[i] += parseInt(projectResource.allocation['N']);
+                var allocationsTemp = $scope.employees[employeeIndex].allocations;
+
+                for (var i = 0; i < $scope.dates.length; i++) {
+                    if (endDate >= $scope.dates[i]) {
+                        allocationsTemp[i] -= parseInt(projectResource.allocation['N']);
+                    } else {
+                        allocationsTemp[i] -= 0;
                     }
                 }
 
-                populateCalendarWithAllocations($scope.allocationInWeek, employeeIndex);
+                if (!$scope.$$phase) {
+                    $scope.$digest();
+                }
+
+                $scope.employees[employeeIndex].allocations = allocationsTemp;
             }
         });
-    };
-
-    var populateCalendarWithAllocations = function (allocations, employeeIndex) {
-        $(angular.element('.fc-bg table tbody tr')[employeeIndex]).html('');
-
-        for (var i = 0; i < 7; i++) {
-            var allocation = 100 - allocations[i];
-            var allocationMeter = "<div round-progress " +
-                "max='100'" +
-                "current='" + allocation + "'" +
-                "radius='50'" +
-                "color='" + utilitySrv.greenToRedColors((allocations[i] % 100) / 10) + "'" +
-                "bgcolor='#ddd'" +
-                "stroke='10'" +
-                "clockwise='true'" +
-                "duration='800'" +
-                "animation='easeInOutQuart'" +
-                "animation-delay='0'></div>";
-
-            $(angular.element('.fc-bg table tbody tr')[employeeIndex])
-                .append("<td><span class='allocation-value'>" + allocation + "</span>" + allocationMeter + "</td>");
-        }
-
-        $compile($(angular.element('.fc-bg table tbody tr')[employeeIndex]).contents())($scope);
     };
 
     var fetchEmployees = function () {
@@ -74,13 +53,10 @@ function DashboardController($scope, $compile, employeeSrv, projectSrv, utilityS
                 var i = 0;
                 angular.forEach(employees, function (employee) {
                     employeeSrv.fetchEmployeeRoles(employee.email['S'], function (error, data) {
-                        if (!error && data.Items.length !== 1 || data.Items[0].roleId['N'] !== '1') {
+                        if (!error && data.Items.length !== 1 || data.Items[0].roles['NS'][0] !== '1') {
                             $scope.employees.push(employee);
                             fetchAllocation(i);
                             i++;
-                            if (!$scope.$$phase) {
-                                $scope.$digest();
-                            }
                         }
                     });
                 });
@@ -89,43 +65,76 @@ function DashboardController($scope, $compile, employeeSrv, projectSrv, utilityS
 
     };
 
+
+    var fetchWeekDays = function () {
+        var curr = new Date();
+        curr.setHours(0, 0, 0, 0);
+        $scope.dates = [curr];
+
+        for (var i = 1; i < 10; i++) {
+            var nextDate = new Date();
+            nextDate = new Date(nextDate.setDate(nextDate.getDate() + i));
+            nextDate.setHours(0, 0, 0, 0);
+
+            $scope.dates.push(nextDate);
+        }
+
+        fetchEmployees();
+    };
+
     (function () {
         $scope.dashboardSearch = '';
-        $scope.predicate = "allocation['N']";
+        $scope.predicate1 = "allocations";
+        $scope.predicate2 = "firstName['S']";
         $scope.reverse = false;
         $scope.eventSources = [];
         $scope.employees = [];
 
-        $scope.weekStartDate = $scope.weekEndDate = new Date();
+        fetchWeekDays();
 
-        $scope.uiConfig = {
-            calendar:{
-                editable: true,
-                header:{
-                    left: 'basicWeek',
-                    center: 'title',
-                    right: 'today prev,next'
-                },
-                viewRender: function(view, element) {
-                    var one_day=1000*60*60*24;
-
-                    if ((view.end._d - view.start._d)/one_day === 7) {
-                        $scope.weekStartDate = view.start._d;
-                        $scope.weekEndDate = view.end._d;
-                        fetchEmployees(view.start._d, view.end._d);
-                    }
-                }
+        $scope.$on("refresh", function (event, message) {
+            if (message === 'dashboard') {
+                fetchWeekDays();
             }
-        };
-
-        setTimeout(function () {
-            angular.element('.fc-basicWeek-button').click().hide();
-        }, 0);
-
+        });
     })();
+
+    $scope.getColorByAllocation = function (allocation) {
+        return utilitySrv.greenToRedColors(10 - (allocation / 10));
+    };
 
     $scope.order = function (predicate) {
         $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
         $scope.predicate = predicate;
+    };
+
+    $scope.showPrevDates = function () {
+        var current = new Date();
+        current.setHours(0, 0, 0, 0);
+        if ($scope.dates[0].getTime() != current.getTime()) {
+            var first = $scope.dates[0];
+            $scope.dates = [];
+            for (var i = 9; i >= 0; i--) {
+                var prevDate = angular.copy(first);
+                prevDate = new Date(prevDate.setDate(prevDate.getDate() - i));
+                prevDate.setHours(0, 0, 0, 0);
+
+                $scope.dates.push(prevDate);
+            }
+            fetchEmployees();
+        }
+    };
+
+    $scope.showNextDates = function () {
+        var last = $scope.dates[9]
+        $scope.dates = [];
+        for (var i = 0; i < 10; i++) {
+            var nextDate = angular.copy(last);
+            nextDate = new Date(nextDate.setDate(nextDate.getDate() + i));
+            nextDate.setHours(0, 0, 0, 0);
+
+            $scope.dates.push(nextDate);
+        }
+        fetchEmployees();
     };
 }

@@ -41,6 +41,12 @@ function employeeService(resourcePlanner, localStorageService) {
                 }
             };
             resourcePlanner.scan(params, callback);
+        },
+        createEmployee: function (data, callback) {
+            resourcePlanner.putItem(data, callback);
+        },
+        assignRolesToEmployee: function (data, callback) {
+            resourcePlanner.putItem(data, callback);
         }
     }
 }
