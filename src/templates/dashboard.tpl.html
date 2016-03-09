@@ -22,13 +22,13 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <td></td>
+                        <td width="150px"></td>
                         <td ng-repeat="eachWeek in weeks">{{eachWeek[0] | date: 'MM/dd'}} - {{eachWeek[6] | date: 'MM/dd'}}</td>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="employee in employees | filter:dashboardSearchKeyword | orderBy: predicate1">
-                        <td width="100px" class="employee-card">
+                        <td width="150px" class="employee-card">
                             {{employee.firstName['S']}} {{employee.lastName['S']}}
                         </td>
                         <td ng-repeat="allocation in employee.allocations track by $index">
