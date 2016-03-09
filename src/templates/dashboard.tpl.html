@@ -23,26 +23,26 @@
                     <thead>
                     <tr>
                         <td></td>
-                        <td ng-repeat="eachDate in dates">{{eachDate | date: 'MM/dd'}}</td>
+                        <td ng-repeat="eachWeek in weeks">{{eachWeek[0] | date: 'MM/dd'}} - {{eachWeek[6] | date: 'MM/dd'}}</td>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="employee in employees | filter:dashboardSearchKeyword | orderBy:predicate2:reverse | orderBy: predicate1:reverse">
+                    <tr ng-repeat="employee in employees | filter:dashboardSearchKeyword | orderBy: predicate1">
                         <td width="100px" class="employee-card">
                             {{employee.firstName['S']}} {{employee.lastName['S']}}
                         </td>
                         <td ng-repeat="allocation in employee.allocations track by $index">
-                            <span class="allocation-value">{{allocation}}</span>
+                            <span class="allocation-value">{{allocation/7 | number:0}}</span>
                             <div
                                 round-progress
                                 max="100"
-                                current="allocation"
-                                color="{{getColorByAllocation(allocation)}}"
+                                current="allocation/7"
+                                color="{{getColorByAllocation(allocation/7)}}"
                                 bgcolor="#eaeaea"
                                 radius="30"
                                 stroke="5"
                                 clockwise="true"
-                                duration="800"
+                                duration="400"
                                 animation="easeInOutQuart"
                                 animation-delay="0"></div>
                         </td>
