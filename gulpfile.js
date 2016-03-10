@@ -82,7 +82,6 @@ gulp.task('templates', function () {
 });
 
 gulp.task('index', function () {
-    var target = gulp.src('/src/index.html');
     var sources = gulp.src(['www/components/**/**/jquery.min.js',
         'www/components/**/angular.min.js',
         'www/components/**/ui-bootstrap-tpls.min.js',

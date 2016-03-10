@@ -5,7 +5,7 @@
     </a>
 </div>
 <div class="modal-body">
-    <form name="employeeForm" novalidate>
+    <form name="employeeForm" novalidate ng-show="modalType === 'Employee'">
         <div class="row">
             <div class="form-group col-lg-6" ng-class="{'error': employeeForm.$submitted && employeeForm.firstName.$error.required}">
                 <label for="createFirstName">First Name</label>
@@ -51,7 +51,15 @@
             </div>
             <div class="form-group col-lg-12">
                 <label for="createSkills">Skills</label>
-                <textarea id="createSkills" ng-model="employee.skills" class="form-control" placeholder="List all skills separated by comma"></textarea>
+                <div>
+                    <span class="skill" ng-repeat="selectedSkill in employee.skills">
+                        {{selectedSkill}} &nbsp;<i class="fa fa-times" ng-click="removeSkill(selectedSkill)"></i>
+                    </span>
+                </div>
+                <input type="text" id="createSkills" ng-model="selected"
+                       uib-typeahead="skill for skill in fetchFilteredSkills($viewValue)"
+                       typeahead-on-select="onSkillSelect($item)"
+                       class="form-control" placeholder="Search here for skills">
             </div>
             <div class="form-group col-lg-12">
                 <label ng-class="{'error': employeeForm.$submitted && isRolesNotSelected()}">Roles</label>
@@ -68,5 +76,8 @@
                 <a href class="cancel-button" ng-click="closeModal()">Cancel</a>
             </div>
         </div>
+    </form>
+    <form name="projectForm" novalidate ng-show="modalType === 'Project'">
+        
     </form>
 </div>

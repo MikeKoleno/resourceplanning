@@ -146,7 +146,7 @@ function DashboardController($scope, $filter, employeeSrv, projectSrv, utilitySr
 
         $scope.$on("refresh", function (event, message) {
             if (message === 'dashboard') {
-                fetchWeekDays();
+                fetchWeeks(first, last, false);
             }
         });
     })();

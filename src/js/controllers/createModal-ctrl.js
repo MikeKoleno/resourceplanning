@@ -1,11 +1,66 @@
 angular.module("RDash")
-    .controller("CreateModalController", ["$scope", "$uibModalInstance", "employeeSrv", "projectSrv", "utilitySrv", "modalType", "Roles", "ngNotify", createModalController]);
+    .controller("CreateModalController", ["$scope", "$filter", "$uibModalInstance", "employeeSrv", "projectSrv", "utilitySrv", "modalType", "Roles", "ngNotify", createModalController]);
 
-function createModalController($scope, $uibModalInstance, employeeSrv, projectSrv, utilitySrv, modalType, Roles, ngNotify) {
+function createModalController($scope, $filter, $uibModalInstance, employeeSrv, projectSrv, utilitySrv, modalType, Roles, ngNotify) {
+    var getSkills = function () {
+        employeeSrv.fetchSkills(function (error, data) {
+            $scope.skills = [];
+            data.Items.map(function (item) {
+                $scope.skills.push(item.name['S']);
+            });
+        });
+    };
+
     (function () {
         $scope.modalType = modalType;
         $scope.roles = Roles;
+        $scope.employee = {
+            skills: []
+        };
+
+        getSkills();
+
+        $scope.config = {
+            autocomplete: [
+                {
+                    words: [/@([A-Za-z]+[_A-Za-z0-9]+)/gi],
+                    cssClass: 'user'
+                }
+            ],
+            dropdown: [
+                {
+                    trigger: /@([A-Za-z]+[_A-Za-z0-9]+)/gi,
+                    list: function (match, callback) {
+                        callback($filter('filter')($scope.skills, match));
+                    },
+                    onSelect: function (item) {
+                        return item;
+                    },
+                    mode: 'replace'
+                }
+            ]
+        };
     })();
+
+    $scope.fetchFilteredSkills = function (keyword) {
+        var result = [];
+        var skills = $filter("filter")($scope.skills, keyword);
+        skills.map(function (item) {
+            if ($scope.employee.skills.indexOf(item) === -1) {
+                result.push(item);
+            }
+        });
+        return result;
+    };
+
+    $scope.removeSkill = function (skill) {
+        $scope.employee.skills.splice($scope.employee.skills.indexOf(skill), 1);
+    };
+
+    $scope.onSkillSelect = function ($item) {
+        $scope.employee.skills.push($item);
+        $scope.selected = "";
+    };
     
     $scope.closeModal = function () {
         $uibModalInstance.dismiss();
@@ -43,7 +98,7 @@ function createModalController($scope, $uibModalInstance, employeeSrv, projectSr
         var interests = [],
             skills = [],
             tempInterests = ($scope.employee.interests !== undefined && $scope.employee.interests !== "") ? $scope.employee.interests.split(',') : [],
-            tempSkills = ($scope.employee.skills !== undefined && $scope.employee.skills !== "") ? $scope.employee.skills.split(',') : [];
+            tempSkills = $scope.employee.skills;
         for (var i = 0; i < tempInterests.length; i++) {
             interests.push({
                 S: tempInterests[i].trim()
