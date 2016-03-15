@@ -11,6 +11,38 @@ function createModalController($scope, $filter, $uibModalInstance, employeeSrv, 
         });
     };
 
+    var getClients = function () {
+        projectSrv.fetchClients(function (error, data) {
+            $scope.clients = data.Items;
+        });
+    };
+
+    var getEmployees = function () {
+        employeeSrv.fetchEmployees(function (error, data) {
+            $scope.employees = [];
+            data.Items.map(function (item) {
+                employeeSrv.fetchEmployeeRoles(item.email['S'], function (error, data) {
+                    if (!error && data.Items.length !== 1 || data.Items[0].roles['NS'][0] !== '1') {
+                        $scope.employees.push(item);
+                    }
+                });
+            });
+        });
+    };
+
+    var getRoles = function () {
+        employeeSrv.fetchRoles(function (error, data) {
+            $scope.roles = data.Items;
+        });
+    };
+
+    // Disable weekend selection
+    var disabled = function (data) {
+        var date = data.date,
+            mode = data.mode;
+        return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+    };
+
     (function () {
         $scope.modalType = modalType;
         $scope.roles = Roles;
@@ -18,29 +50,73 @@ function createModalController($scope, $filter, $uibModalInstance, employeeSrv, 
             skills: []
         };
 
-        getSkills();
+        $scope.project = {};
 
-        $scope.config = {
-            autocomplete: [
-                {
-                    words: [/@([A-Za-z]+[_A-Za-z0-9]+)/gi],
-                    cssClass: 'user'
-                }
-            ],
-            dropdown: [
-                {
-                    trigger: /@([A-Za-z]+[_A-Za-z0-9]+)/gi,
-                    list: function (match, callback) {
-                        callback($filter('filter')($scope.skills, match));
-                    },
-                    onSelect: function (item) {
-                        return item;
-                    },
-                    mode: 'replace'
-                }
-            ]
-        };
+        $scope.resources = [
+            {
+                employee: {
+                    name: "",
+                    email: ""
+                },
+                role: {
+                    id: 0,
+                    title: ''
+                },
+                allocation: '',
+                notes: ''
+            }
+        ];
+
+        if (modalType === 'Project') {
+            getSkills();
+            getClients();
+            getEmployees();
+            getRoles();
+
+            $scope.dateOptions = {
+                dateDisabled: disabled,
+                formatYear: 'yy',
+                minDate: new Date(),
+                startingDay: 1
+            };
+
+            $scope.popup1 = {
+                opened: false
+            };
+
+            $scope.popup2 = {
+                opened: false
+            };
+
+            $scope.project.startDate = new Date();
+            $scope.project.endDate = new Date();
+
+            $scope.calendarFormat = "MM/dd/yyyy";
+        }
     })();
+
+    $scope.open1 = function () {
+        $scope.popup1.opened = true;
+    };
+
+    $scope.open2 = function () {
+        $scope.popup2.opened = true;
+    };
+
+    $scope.addNewResource = function () {
+        $scope.resources.push({
+            employee: {
+                name: "",
+                email: ""
+            },
+            role: {
+                id: 0,
+                title: ''
+            },
+            allocation: '',
+            notes: ''
+        });
+    };
 
     $scope.fetchFilteredSkills = function (keyword) {
         var result = [];
@@ -61,7 +137,7 @@ function createModalController($scope, $filter, $uibModalInstance, employeeSrv, 
         $scope.employee.skills.push($item);
         $scope.selected = "";
     };
-    
+
     $scope.closeModal = function () {
         $uibModalInstance.dismiss();
     };
@@ -93,7 +169,7 @@ function createModalController($scope, $filter, $uibModalInstance, employeeSrv, 
             }
         });
     };
-    
+
     $scope.createEmployee = function () {
         var interests = [],
             skills = [],
@@ -182,5 +258,139 @@ function createModalController($scope, $filter, $uibModalInstance, employeeSrv, 
             }
             return isEmpty;
         }
-    }
+    };
+
+    var fetchProjectParams = function () {
+        var startDate = new Date($scope.project.startDate);
+        var endDate = new Date($scope.project.endDate);
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setHours(0, 0, 0, 0);
+        var params = {
+            TableName: "projects",
+            Item: {
+                name: {
+                    S: $scope.project.name
+                },
+                clientName: {
+                    S: $scope.project.client
+                },
+                startDate: {
+                    S: startDate.toISOString()
+                },
+                endDate: {
+                    S: endDate.toISOString()
+                },
+                platForm: {
+                    L: [
+                        {
+                            S: $scope.project.platform
+                        }
+                    ]
+                }
+            },
+            ConditionExpression: "#name <> :name",
+            ExpressionAttributeNames: {
+                "#name": "name"
+            },
+            ExpressionAttributeValues: {
+                ":name": {
+                    S: $scope.project.name
+                }
+            }
+        };
+
+        if (!utilitySrv.isEmpty($scope.project.notes)) {
+            params.Item.notes = {
+                S: $scope.project.notes
+            }
+        }
+
+        return params;
+    };
+
+    var addResourcesToProject = function (projectName) {
+        var resources = {M: {}};
+
+        angular.forEach($scope.resources, function(resource) {
+            if (resources.M[resource.employee.email] === undefined) {
+                resources.M[resource.employee.email] = {
+                    M: {
+                        allocation: {
+                            N: resource.allocation
+                        },
+                        roles: {
+                            NS: [resource.role.id]
+                        },
+                        notes: {
+                            S: resource.notes
+                        }
+                    }
+                };
+
+            } else {
+                resources.M[resource.employee.email].roles.NS.push(resource.role.id);
+                resources.M[resource.employee.email].M["notes"].S += resource.notes;
+            }
+        });
+
+        var params = {
+            TableName: "projectResource",
+            Item: {
+                projectName: {
+                    S: projectName
+                },
+                resources: resources
+            }
+        };
+
+        projectSrv.addResources(params, function (error, data) {
+            if (error) {
+                ngNotify.set("There seems an issue with the request. Please try again", 'error');
+            } else {
+                $uibModalInstance.close('project created');
+            }
+        });
+    };
+
+    $scope.createProject = function () {
+        var projectParams = fetchProjectParams();
+        projectSrv.createProject(projectParams, function (error, data) {
+            if (error.message === 'The conditional request failed') {
+                ngNotify.set("The project with this name has already been created.", 'error');
+            } else if (error) {
+                ngNotify.set("There seems an issue with the request. Please try again", 'error');
+            } else {
+                addResourcesToProject($scope.project.name);
+            }
+        });
+    };
+
+    $scope.isResourcesFilled = function (index) {
+        var isFilled = true;
+        if (utilitySrv.isEmpty($scope.resources[index].employee.email)
+            || parseInt($scope.resources[index].role.id) === 0
+            || utilitySrv.isEmpty($scope.resources[index].allocation)) {
+            isFilled = false;
+        }
+        return isFilled;
+    };
+
+    $scope.removeResource = function (index) {
+        if (index === 0) {
+            $scope.resources[index] = {
+                employee: {
+                    name: "",
+                    email: ""
+                },
+                role: {
+                    id: 0,
+                    title: ''
+                },
+                allocation: '',
+                notes: ''
+            };
+        } else {
+            $scope.resources.splice(index, 1);
+        }
+    };
 }

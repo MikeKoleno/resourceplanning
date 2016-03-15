@@ -7,19 +7,25 @@
 <div class="modal-body">
     <form name="employeeForm" novalidate ng-show="modalType === 'Employee'">
         <div class="row">
-            <div class="form-group col-lg-6" ng-class="{'error': employeeForm.$submitted && employeeForm.firstName.$error.required}">
+            <div class="form-group col-lg-6"
+                 ng-class="{'error': employeeForm.$submitted && employeeForm.firstName.$error.required}">
                 <label for="createFirstName">First Name</label>
-                <input type="text" ng-model="employee.firstName" name="firstName" class="form-control" id="createFirstName" placeholder="First Name" required>
+                <input type="text" ng-model="employee.firstName" name="firstName" class="form-control"
+                       id="createFirstName" placeholder="First Name" required>
                 <span class="error-text" ng-show="employeeForm.$submitted && employeeForm.firstName.$error.required">First Name is required.</span>
             </div>
-            <div class="form-group col-lg-6" ng-class="{'error': employeeForm.$submitted && employeeForm.lastName.$error.required}">
+            <div class="form-group col-lg-6"
+                 ng-class="{'error': employeeForm.$submitted && employeeForm.lastName.$error.required}">
                 <label for="createLastName">Last Name</label>
-                <input type="text" ng-model="employee.lastName" name="lastName" class="form-control" id="createLastName" placeholder="Last Name" required>
+                <input type="text" ng-model="employee.lastName" name="lastName" class="form-control" id="createLastName"
+                       placeholder="Last Name" required>
                 <span class="error-text" ng-show="employeeForm.$submitted && employeeForm.lastName.$error.required">First Name is required.</span>
             </div>
-            <div class="form-group col-lg-7" ng-class="{'error': employeeForm.$submitted && (employeeForm.email.$error.required || employeeForm.email.$error.email)}">
+            <div class="form-group col-lg-7"
+                 ng-class="{'error': employeeForm.$submitted && (employeeForm.email.$error.required || employeeForm.email.$error.email)}">
                 <label for="createEmail">Email Address</label>
-                <input type="email" ng-model="employee.email" name="email" class="form-control" id="createEmail" placeholder="Email" required>
+                <input type="email" ng-model="employee.email" name="email" class="form-control" id="createEmail"
+                       placeholder="Email" required>
                 <span class="error-text" ng-show="employeeForm.$submitted && employeeForm.email.$error.required">Email Address is required.</span>
                 <span class="error-text" ng-show="employeeForm.$submitted && employeeForm.email.$error.email">This is not a valid email.</span>
             </div>
@@ -30,24 +36,32 @@
                         {{employee.location}} <i class="fa fa-chevron-down"></i>
                     </button>
                     <ul uib-dropdown-menu role="menu">
-                        <li role="menuitem"><a href="#" ng-mousedown="employee.location= 'Chicago, USA'">Chicago, USA</a></li>
-                        <li role="menuitem"><a href="#" ng-mousedown="employee.location= 'New York, USA'">New York, USA</a></li>
-                        <li role="menuitem"><a href="#" ng-mousedown="employee.location= 'Buenos Aires, AR'">Buenos Aires, AR</a></li>
+                        <li role="menuitem"><a href="#" ng-mousedown="employee.location= 'Chicago, USA'">Chicago,
+                            USA</a></li>
+                        <li role="menuitem"><a href="#" ng-mousedown="employee.location= 'New York, USA'">New York,
+                            USA</a></li>
+                        <li role="menuitem"><a href="#" ng-mousedown="employee.location= 'Buenos Aires, AR'">Buenos
+                            Aires, AR</a></li>
                     </ul>
                 </div>
             </div>
             <div class="form-group col-lg-12">
                 <label>Travel Preference</label>
                 <div class="btn-group checkbox-btn-group form-control row">
-                    <label class="btn checkbox-btn col-lg-6" ng-model="employee.travelPreference" uib-btn-radio="'Road Warrior'">Road Warrior</label>
-                    <label class="btn checkbox-btn col-lg-6" ng-model="employee.travelPreference" uib-btn-radio="'Occasional Travel'">Occasional Travel</label>
-                    <label class="btn checkbox-btn col-lg-6" ng-model="employee.travelPreference" uib-btn-radio="'Only If Absolutely Needed'">Only If Absolutely Needed</label>
-                    <label class="btn checkbox-btn col-lg-6" ng-model="employee.travelPreference" uib-btn-radio="'I Simply Can\'t'">I Simply Can't</label>
+                    <label class="btn checkbox-btn col-lg-6" ng-model="employee.travelPreference"
+                           uib-btn-radio="'Road Warrior'">Road Warrior</label>
+                    <label class="btn checkbox-btn col-lg-6" ng-model="employee.travelPreference"
+                           uib-btn-radio="'Occasional Travel'">Occasional Travel</label>
+                    <label class="btn checkbox-btn col-lg-6" ng-model="employee.travelPreference"
+                           uib-btn-radio="'Only If Absolutely Needed'">Only If Absolutely Needed</label>
+                    <label class="btn checkbox-btn col-lg-6" ng-model="employee.travelPreference"
+                           uib-btn-radio="'I Simply Can\'t'">I Simply Can't</label>
                 </div>
             </div>
             <div class="form-group col-lg-12">
                 <label for="createInterests">Interests</label>
-                <textarea id="createInterests" ng-model="employee.interests" class="form-control" placeholder="List all interests separated by comma"></textarea>
+                <textarea id="createInterests" ng-model="employee.interests" class="form-control"
+                          placeholder="List all interests separated by comma"></textarea>
             </div>
             <div class="form-group col-lg-12">
                 <label for="createSkills">Skills</label>
@@ -64,20 +78,205 @@
             <div class="form-group col-lg-12">
                 <label ng-class="{'error': employeeForm.$submitted && isRolesNotSelected()}">Roles</label>
                 <i class="help-text">Check all that apply</i>
-                <span class="error-text" ng-show="employeeForm.$submitted && isRolesNotSelected()">Please select roles.</span>
+                <span class="error-text"
+                      ng-show="employeeForm.$submitted && isRolesNotSelected()">Please select roles.</span>
                 <div class="btn-group checkbox-btn-group form-control">
                     <div class="row">
-                        <label class="btn checkbox-btn col-lg-6" ng-model="employee.roles[$index]" ng-repeat="employeeRole in roles" uib-btn-checkbox>{{employeeRole}}</label>
+                        <label class="btn checkbox-btn col-lg-6" ng-model="employee.roles[$index]"
+                               ng-repeat="employeeRole in roles" uib-btn-checkbox>{{employeeRole}}</label>
                     </div>
                 </div>
             </div>
             <div class="form-group col-lg-12 text-center">
-                <button type="submit" class="btn from-control submit-button btn-block" ng-mousedown="createEmployee()">SUBMIT</button>
+                <button type="submit" class="btn from-control submit-button btn-block" ng-mousedown="createEmployee()">
+                    SUBMIT
+                </button>
                 <a href class="cancel-button" ng-click="closeModal()">Cancel</a>
             </div>
         </div>
     </form>
     <form name="projectForm" novalidate ng-show="modalType === 'Project'">
-        
+        <div class="row">
+            <!--Name-->
+            <div class="form-group col-lg-6"
+                 ng-class="{'error': projectForm.$submitted && projectForm.projectName.$error.required}">
+                <label for="projectName">Name</label>
+                <input type="text" id="projectName" ng-model="project.name" name="projectName" class="form-control"
+                       placeholder="Project Name" required>
+                <span class="error-text" ng-show="projectForm.$submitted && projectForm.projectName.$error.required">Project Name is required.</span>
+            </div>
+            <!--Platform-->
+            <div class="form-group col-lg-6"
+                 ng-class="{'error': projectForm.$submitted && projectForm.projectName === ''}">
+                <label for="platform">Type</label>
+                <div class="btn-group btn-block" uib-dropdown ng-init="project.platform = 'iOS'">
+                    <button id="platform" type="button" class="btn form-control" uib-dropdown-toggle
+                            ng-disabled="disabled">
+                        {{project.platform}} <i class="fa fa-chevron-down"></i>
+                    </button>
+                    <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                        <li role="menuitem"><a href="#"
+                                               ng-click="project.platform = 'iOS'; otherProject = false;">iOS</a></li>
+                        <li role="menuitem"><a href="#" ng-click="project.platform = 'Android'; otherProject = false;">Android</a>
+                        </li>
+                        <li role="menuitem"><a href="#"
+                                               ng-click="project.platform = 'Responsive Web'; otherProject = false;">Responsive
+                            Web</a></li>
+                        <li role="menuitem"><a href="#"
+                                               ng-click="project.platform = 'Hybrid App'; otherProject = false;">Hybrid
+                            App</a></li>
+                        <li role="menuitem"><a href="#" ng-click="project.platform = ''; otherProject = true;">Other</a>
+                        </li>
+                    </ul>
+                </div>
+                <input type="text" class="form-control" ng-Model="project.platform" ng-show="otherProject"
+                       placeholder="What kind of project is this?">
+            </div>
+            <!--Client-->
+            <div class="form-group col-lg-12"
+                 ng-init="showClientDropdown = true"
+                 ng-class="{'error': projectForm.$submitted && projectForm.newClient.$error.required}">
+                <label for="client">Client</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="" class="green-button"
+                   ng-click="showClientDropdown = !showClientDropdown; project.client = '';">
+                    <i class="fa fa-plus" ng-show="showClientDropdown"></i> {{showClientDropdown ? 'Add New' :
+                    'Cancel'}}
+                </a>
+                <div class="btn-group btn-block" uib-dropdown ng-show="showClientDropdown">
+                    <button id="client" type="button" class="btn form-control" uib-dropdown-toggle
+                            ng-disabled="disabled">
+                        {{project.client}} <i class="fa fa-chevron-down"></i>
+                    </button>
+                    <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                        <li role="menuitem" ng-repeat="client in clients"><a href="#"
+                                                                             ng-click="project.client = client.name['S'];">{{client.name['S']}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <!--Add Client-->
+                <input type="text" class="form-control" name="newClient" ng-Model="project.client" ng-show="!showClientDropdown"
+                       placeholder="Client Name" required>
+                <span class="error-text" ng-show="projectForm.$submitted && projectForm.newClient.$error.required || project.client === ''">Client Name is required.</span>
+            </div>
+            <div class="form-group col-lg-6">
+                <label>Start Date</label>
+                <div class="input-group btn-block calendar">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{calendarFormat}}"
+                           ng-model="project.startDate" is-open="popup1.opened"
+                           datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
+                    <div class="input-group-btn calendar-btn">
+                        <button type="button" class="btn" ng-click="open1()"><i class="fa fa-calendar"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-lg-6">
+                <label>End Date</label>
+                <div class="input-group btn-block calendar">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{calendarFormat}}"
+                           ng-model="project.endDate" is-open="popup2.opened"
+                           datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
+                    <div class="input-group-btn calendar-btn">
+                        <button type="button" class="btn" ng-click="open2()"><i class="fa fa-calendar"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!--Resources-->
+            <div class="form-group col-lg-12">
+                <label>Resources</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="" class="green-button" ng-click="addNewResource()">
+                    <i class="fa fa-plus"></i> Add More
+                </a>
+
+                <div class="row resource-table" ng-repeat="resource in resources track by $index">
+                    <div class="col-lg-3 resource-col">
+                        <label>Employee</label>
+                        <div class="btn-group btn-block" uib-dropdown>
+                            <button type="button" class="btn form-control" uib-dropdown-toggle
+                                    ng-disabled="disabled">
+                                {{resource.employee.name}} <i class="fa fa-chevron-down"></i>
+                            </button>
+                            <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                                <li role="menuitem" ng-repeat="employee in employees"><a href="#"
+                                                                                         ng-click="resource.employee.name = employee.firstName['S'] + employee.lastName['S']; resource.employee.email = employee.email['S'];">{{employee.firstName['S']}}
+                                    {{employee.lastName['S']}}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 resource-col">
+                        <label>Role</label>
+                        <div class="btn-group btn-block" uib-dropdown>
+                            <button type="button" class="btn form-control" uib-dropdown-toggle
+                                    ng-disabled="disabled">
+                                {{resource.role.title}} <i class="fa fa-chevron-down"></i>
+                            </button>
+                            <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                                <li role="menuitem" ng-repeat="role in roles"
+                                    ng-if="role.shortTitle['S'] !== 'DCE'">
+                                    <a href="#"
+                                       ng-click="resource.role.title = role.title['S']; resource.role.id = role.id['N'];">{{role.title['S']}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 resource-col">
+                        <label>Allocation:</label>
+                        <input type="text" class="form-control" ng-model="resource.allocation"
+                               placeholder="Allocation (0-100)">
+                    </div>
+                    <div class="col-lg-2 resource-col">
+                        <label>Notes</label>
+                        <input type="text" class="form-control" ng-model="resource.notes" placeholder="Add notes">
+                    </div>
+                    <div class="col-lg-2 resource-col resource-col-buttons">
+                        <a href="" class="green-button" ng-click="removeResource($index)" ng-if="$index === 0">Clear</a>
+                        <a href="" class="green-button" ng-click="removeResource($index)" ng-if="$index !== 0"><i class="fa fa-times"></i> Remove</a>
+                    </div>
+                    <div class="col-lg-12">
+                        <span class="error-text" ng-show="projectForm.$submitted && !isResourcesFilled($index)">Resource should not be empty.</span>
+                    </div>
+                </div>
+
+
+                <!--<table class="table resource-table">-->
+                    <!--<tbody>-->
+                    <!--<tr ng-repeat="resource in resources">-->
+                        <!--&lt;!&ndash;email&ndash;&gt;-->
+                        <!--<td width="25%">-->
+                            <!---->
+                        <!--</td>-->
+                        <!--&lt;!&ndash;role&ndash;&gt;-->
+                        <!--<td width="25%">-->
+                            <!---->
+                        <!--</td>-->
+                        <!--&lt;!&ndash;Allocation&ndash;&gt;-->
+                        <!--<td>-->
+                            <!---->
+                        <!--</td>-->
+                        <!--&lt;!&ndash;notes&ndash;&gt;-->
+                        <!--<td>-->
+                            <!---->
+                        <!--</td>-->
+                        <!--<td>-->
+                            <!---->
+                        <!--</td>-->
+                    <!--</tr>-->
+                    <!--</tbody>-->
+                <!--</table>-->
+            </div>
+            <!--Notes-->
+            <div class="form-group col-lg-12">
+                <label for="projectNotes">Notes</label>
+                <textarea id="projectNotes" class="form-control" ng-model="project.notes"></textarea>
+            </div>
+            <!--Submit & Cancel buttons-->
+            <div class="form-group col-lg-12 text-center">
+                <button type="submit" class="btn from-control submit-button btn-block" ng-mousedown="createProject()">
+                    SUBMIT
+                </button>
+                <a href class="cancel-button" ng-click="closeModal()">Cancel</a>
+            </div>
+        </div>
     </form>
 </div>

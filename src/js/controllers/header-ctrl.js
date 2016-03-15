@@ -55,6 +55,9 @@ function headerController($rootScope, $scope, $uibModal, ngNotify) {
             if (message === 'employee created') {
                 ngNotify.set('Employee created successfully');
                 $rootScope.$broadcast("refresh", "dashboard");
+            } else {
+                ngNotify.set('Project created successfully');
+                $rootScope.$broadcast("refresh", "dashboard");
             }
         });
     };

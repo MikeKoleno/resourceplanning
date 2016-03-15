@@ -4,7 +4,7 @@ angular
 
 function employeeService(resourcePlanner) {
     return {
-        fetch: function (callback) {
+        fetchEmployees: function (callback) {
             var params = {
                 "TableName": "employee"
             };
@@ -53,6 +53,11 @@ function employeeService(resourcePlanner) {
                 TableName: "skills"
             };
             resourcePlanner.scan(params, callback);
+        },
+        fetchRoles: function (callback) {
+            resourcePlanner.scan({
+                TableName: 'roles'
+            }, callback);
         }
     }
 }

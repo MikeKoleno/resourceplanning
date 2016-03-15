@@ -6,13 +6,29 @@ function projectService(resourcePlanner) {
     return {
         fetchAllocation: function (email, callback) {
             var params = {
-                TableName: "projectResource",
+                TableName: "projectResource"
+            };
+            resourcePlanner.scan(params, function (error, data) {
+                var results = [];
+                if (!error) {
+                    data.Items.map(function (item) {
+                        if (item.resources.M[email.toString()]) {
+                            results.push(item);
+                        }
+                    });
+                    callback(error, results);
+                }
+            });
+        },
+        fetchProjectDetails: function (projectName, callback) {
+            var params = {
+                TableName: "projects",
                 ScanFilter: {
-                    email: {
-                        ComparisonOperator: 'EQ',
+                    name: {
+                        ComparisonOperator:  'EQ',
                         AttributeValueList: [
                             {
-                                S: email
+                                S: projectName
                             }
                         ]
                     }
@@ -20,21 +36,17 @@ function projectService(resourcePlanner) {
             };
             resourcePlanner.scan(params, callback);
         },
-        fetchProjectDetails: function (projectId, callback) {
+        fetchClients : function (callback) {
             var params = {
-                TableName: "projects",
-                ScanFilter: {
-                    id: {
-                        ComparisonOperator:  'EQ',
-                        AttributeValueList: [
-                            {
-                                N: projectId
-                            }
-                        ]
-                    }
-                }
+                TableName: 'client'
             };
             resourcePlanner.scan(params, callback);
+        },
+        createProject : function (params, callback) {
+            resourcePlanner.putItem(params, callback);
+        },
+        addResources : function (params, callback) {
+            resourcePlanner.putItem(params, callback);
         }
     };
 };

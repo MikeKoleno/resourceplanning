@@ -294,3 +294,45 @@ a, button {
 .error {
   color: @error-state-color;
 }
+
+.green-button {
+  color: @secondary-color;
+  font-size: 12px;
+  &:active, &:hover, &:focus {
+    color: @secondary-color;
+  }
+}
+
+.resource-table {
+  border: 2px solid @teritary-color;
+  margin-top: -2px;
+  .resource-col {
+    margin-bottom: 0;
+    height: 80px;
+    padding: 15px;
+    .green-button {
+      margin-top: 25px;
+      display: inline-block;
+    }
+  }
+  .col-lg-3 {
+    width: 25%;
+  }
+  .col-lg-2 {
+    width: 20%
+  }
+  .resource-col-buttons {
+    width: 10%;
+  }
+}
+
+.calendar {
+  .calendar-btn {
+    .btn {
+      border: 0;
+      border-bottom: 2px solid #ddd !important;
+      height: 36px;
+      background: transparent;
+    }
+  }
+}

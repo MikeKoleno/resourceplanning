@@ -1,18 +1,18 @@
 angular.module("RDash")
-    .controller("DashboardController", ["$scope", "$filter", "employeeSrv", "projectSrv", "utilitySrv", DashboardController]);
+    .controller("DashboardController", ["$scope", "employeeSrv", "projectSrv", "utilitySrv", DashboardController]);
 
-function DashboardController($scope, $filter, employeeSrv, projectSrv, utilitySrv) {
+function DashboardController($scope, employeeSrv, projectSrv, utilitySrv) {
 
     var fetchAllocation = function ($index) {
         projectSrv.fetchAllocation($scope.employees[$index].email['S'], function (error, data) {
             if (!error) {
-                var projectsResourceData = data.Items;
+                var projectsResourceData = data;
                 $scope.employees[$index].allocations = [700, 700, 700, 700, 700, 700, 700, 700, 700, 700];
                 if (projectsResourceData.length !== 0) {
                     angular.forEach(projectsResourceData, function (eachProjectResource) {
 
                         for (var i = 0; i < $scope.weeks.length; i++) {
-                            findAllocationByWeek(eachProjectResource, $index, $scope.weeks[i]);
+                            findAllocationByWeek(eachProjectResource, $scope.employees[$index].email['S'], $index, $scope.weeks[i]);
                         }
                     });
                 }
@@ -20,8 +20,8 @@ function DashboardController($scope, $filter, employeeSrv, projectSrv, utilitySr
         });
     };
 
-    var findAllocationByWeek = function (projectResource, employeeIndex, duration) {
-        projectSrv.fetchProjectDetails(projectResource.projectId['N'], function (error, data) {
+    var findAllocationByWeek = function (projectResource, email, employeeIndex, duration) {
+        projectSrv.fetchProjectDetails(projectResource.projectName['S'], function (error, data) {
             if (!error) {
                 var projectDetails = data.Items[0];
                 var endDate = new Date(projectDetails.endDate['S']);
@@ -33,7 +33,7 @@ function DashboardController($scope, $filter, employeeSrv, projectSrv, utilitySr
                     weekIndex = 0;
                 while(day <= duration[6]) {
                     if (endDate >= day) {
-                        allocationsInWeek -= parseInt(projectResource.allocation['N']);
+                        allocationsInWeek -= parseInt(projectResource.resources.M[email].M.allocation.N);
                     } else {
                         allocationsInWeek -= 0;
                     }
@@ -51,7 +51,7 @@ function DashboardController($scope, $filter, employeeSrv, projectSrv, utilitySr
     };
 
     var fetchEmployees = function () {
-        employeeSrv.fetch(function (error, data) {
+        employeeSrv.fetchEmployees(function (error, data) {
             if (!error) {
                 var employees = data.Items;
                 angular.element('.fc-bg table tbody').html('');
