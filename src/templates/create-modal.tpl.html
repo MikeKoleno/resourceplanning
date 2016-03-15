@@ -133,9 +133,11 @@
                        placeholder="What kind of project is this?">
             </div>
             <!--Client-->
-            <div class="form-group col-lg-12"
+            <div class="form-group"
                  ng-init="showClientDropdown = true"
-                 ng-class="{'error': projectForm.$submitted && projectForm.newClient.$error.required}">
+                 ng-class="{'error': projectForm.$submitted && projectForm.newClient.$error.required,
+                 'col-lg-6': !showClientDropdown,
+                 'col-lg-12': showClientDropdown}">
                 <label for="client">Client</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <a href="" class="green-button"
                    ng-click="showClientDropdown = !showClientDropdown; project.client = '';">
@@ -154,9 +156,26 @@
                     </ul>
                 </div>
                 <!--Add Client-->
-                <input type="text" class="form-control" name="newClient" ng-Model="project.client" ng-show="!showClientDropdown"
+                <input type="text" class="form-control" name="newClient" ng-Model="project.client"
+                       ng-show="!showClientDropdown"
                        placeholder="Client Name" required>
-                <span class="error-text" ng-show="projectForm.$submitted && projectForm.newClient.$error.required || project.client === ''">Client Name is required.</span>
+                <span class="error-text"
+                      ng-show="projectForm.$submitted && (projectForm.newClient.$error.required || project.client === '')">Client Name is required.</span>
+            </div>
+            <div class="form-group col-lg-6" ng-show="!showClientDropdown">
+                <label for="dce">DCE</label>
+                <div class="btn-group btn-block" uib-dropdown>
+                    <button id="dce" type="button" class="btn form-control" uib-dropdown-toggle
+                            ng-disabled="disabled">
+                        {{project.dce.firstName['S']}} {{project.dce.lastName['S']}} <i class="fa fa-chevron-down"></i>
+                    </button>
+                    <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                        <li role="menuitem" ng-repeat="dce in dces">
+                            <a href="#"
+                               ng-click="project.dce = dce ">{{dce.firstName['S']}} {{dce.lastName['S']}}</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="form-group col-lg-6">
                 <label>Start Date</label>
@@ -188,7 +207,6 @@
                 <a href="" class="green-button" ng-click="addNewResource()">
                     <i class="fa fa-plus"></i> Add More
                 </a>
-
                 <div class="row resource-table" ng-repeat="resource in resources track by $index">
                     <div class="col-lg-3 resource-col">
                         <label>Employee</label>
@@ -199,7 +217,7 @@
                             </button>
                             <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
                                 <li role="menuitem" ng-repeat="employee in employees"><a href="#"
-                                                                                         ng-click="resource.employee.name = employee.firstName['S'] + employee.lastName['S']; resource.employee.email = employee.email['S'];">{{employee.firstName['S']}}
+                                                                                         ng-click="resource.employee.name = employee.firstName['S'] + ' ' + employee.lastName['S']; resource.employee.email = employee.email['S'];">{{employee.firstName['S']}}
                                     {{employee.lastName['S']}}</a></li>
                             </ul>
                         </div>
@@ -231,39 +249,13 @@
                     </div>
                     <div class="col-lg-2 resource-col resource-col-buttons">
                         <a href="" class="green-button" ng-click="removeResource($index)" ng-if="$index === 0">Clear</a>
-                        <a href="" class="green-button" ng-click="removeResource($index)" ng-if="$index !== 0"><i class="fa fa-times"></i> Remove</a>
+                        <a href="" class="green-button" ng-click="removeResource($index)" ng-if="$index !== 0"><i
+                                class="fa fa-times"></i> Remove</a>
                     </div>
                     <div class="col-lg-12">
                         <span class="error-text" ng-show="projectForm.$submitted && !isResourcesFilled($index)">Resource should not be empty.</span>
                     </div>
                 </div>
-
-
-                <!--<table class="table resource-table">-->
-                    <!--<tbody>-->
-                    <!--<tr ng-repeat="resource in resources">-->
-                        <!--&lt;!&ndash;email&ndash;&gt;-->
-                        <!--<td width="25%">-->
-                            <!---->
-                        <!--</td>-->
-                        <!--&lt;!&ndash;role&ndash;&gt;-->
-                        <!--<td width="25%">-->
-                            <!---->
-                        <!--</td>-->
-                        <!--&lt;!&ndash;Allocation&ndash;&gt;-->
-                        <!--<td>-->
-                            <!---->
-                        <!--</td>-->
-                        <!--&lt;!&ndash;notes&ndash;&gt;-->
-                        <!--<td>-->
-                            <!---->
-                        <!--</td>-->
-                        <!--<td>-->
-                            <!---->
-                        <!--</td>-->
-                    <!--</tr>-->
-                    <!--</tbody>-->
-                <!--</table>-->
             </div>
             <!--Notes-->
             <div class="form-group col-lg-12">

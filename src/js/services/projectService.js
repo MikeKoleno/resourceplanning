@@ -42,6 +42,9 @@ function projectService(resourcePlanner) {
             };
             resourcePlanner.scan(params, callback);
         },
+        createClient: function (params, callback) {
+            resourcePlanner.putItem(params, callback);
+        },
         createProject : function (params, callback) {
             resourcePlanner.putItem(params, callback);
         },

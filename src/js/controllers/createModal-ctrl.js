@@ -20,10 +20,13 @@ function createModalController($scope, $filter, $uibModalInstance, employeeSrv, 
     var getEmployees = function () {
         employeeSrv.fetchEmployees(function (error, data) {
             $scope.employees = [];
+            $scope.dces = [];
             data.Items.map(function (item) {
                 employeeSrv.fetchEmployeeRoles(item.email['S'], function (error, data) {
                     if (!error && data.Items.length !== 1 || data.Items[0].roles['NS'][0] !== '1') {
                         $scope.employees.push(item);
+                    } else {
+                        $scope.dces.push(item);
                     }
                 });
             });
@@ -320,16 +323,25 @@ function createModalController($scope, $filter, $uibModalInstance, employeeSrv, 
                         },
                         roles: {
                             NS: [resource.role.id]
-                        },
-                        notes: {
-                            S: resource.notes
                         }
                     }
                 };
-
+                if (!resources.M[resource.employee.email].notes && resource.notes !== "") {
+                    resources.M[resource.employee.email]["notes"] = {
+                        S: resource.notes
+                    }
+                }
             } else {
                 resources.M[resource.employee.email].roles.NS.push(resource.role.id);
-                resources.M[resource.employee.email].M["notes"].S += resource.notes;
+                if (resource.notes !== "") {
+                    if (!resources.M[resource.employee.email].notes) {
+                        resources.M[resource.employee.email]["notes"] = {
+                            S: resource.notes
+                        }
+                    } else {
+                        resources.M[resource.employee.email][notes].S += resource.notes;
+                    }
+                }
             }
         });
 
@@ -352,10 +364,10 @@ function createModalController($scope, $filter, $uibModalInstance, employeeSrv, 
         });
     };
 
-    $scope.createProject = function () {
+    var projectCreate = function () {
         var projectParams = fetchProjectParams();
         projectSrv.createProject(projectParams, function (error, data) {
-            if (error.message === 'The conditional request failed') {
+            if (error && error.message === 'The conditional request failed') {
                 ngNotify.set("The project with this name has already been created.", 'error');
             } else if (error) {
                 ngNotify.set("There seems an issue with the request. Please try again", 'error');
@@ -363,6 +375,42 @@ function createModalController($scope, $filter, $uibModalInstance, employeeSrv, 
                 addResourcesToProject($scope.project.name);
             }
         });
+    };
+
+    $scope.createProject = function () {
+        if (!$scope.showClientDropdown) {
+            var clientParam = {
+                TableName: 'client',
+                Item: {
+                    name: {
+                        S: $scope.project.client
+                    },
+                    dce: {
+                        S: $scope.project.dce.email['S']
+                    }
+                },
+                ConditionExpression: "#name <> :name",
+                ExpressionAttributeNames: {
+                    "#name": "name"
+                },
+                ExpressionAttributeValues: {
+                    ":name": {
+                        S: $scope.project.client
+                    }
+                }
+            };
+            projectSrv.createClient(clientParam, function (error, data) {
+                if (error && error.message === 'The conditional request failed') {
+                    ngNotify.set("The client with this name has already been created.", 'error');
+                } else if (error) {
+                    ngNotify.set("There seems an issue with the request. Please try again", 'error');
+                } else {
+                    projectCreate();
+                }
+            });
+        }else {
+            projectCreate();
+        }
     };
 
     $scope.isResourcesFilled = function (index) {
