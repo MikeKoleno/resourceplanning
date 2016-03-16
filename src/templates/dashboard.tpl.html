@@ -29,14 +29,19 @@
                     <tbody>
                     <tr ng-repeat="employee in employees | filter:dashboardSearchKeyword | orderBy: predicate1">
                         <td width="150px" class="employee-card">
-                            {{employee.firstName['S']}} {{employee.lastName['S']}}
+                            <a href="" class="employee-button" ng-click="openEmployeeDetails(employee)">{{employee.firstName['S']}} {{employee.lastName['S']}}</a>
+                            <div class="roles">
+                                <span title="{{getRoleName(employeeRole)}}"
+                                      ng-class="fetchClassForRole(employeeRole)"
+                                      ng-repeat="employeeRole in employee.roles['NS'] | orderBy: roles['NS']"></span>
+                            </div>
                         </td>
                         <td ng-repeat="allocation in employee.allocations track by $index">
                             <span class="allocation-value">{{allocation/7 | number:0}}</span>
                             <div
                                 round-progress
                                 max="100"
-                                current="allocation/7"
+                                current="getPositiveAllocation(allocation/7)"
                                 color="{{getColorByAllocation(allocation/7)}}"
                                 bgcolor="#eaeaea"
                                 radius="30"

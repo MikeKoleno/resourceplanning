@@ -1,7 +1,7 @@
 angular.module("RDash")
-    .controller("DashboardController", ["$scope", "employeeSrv", "projectSrv", "utilitySrv", DashboardController]);
+    .controller("DashboardController", ["$scope", "$uibModal", "employeeSrv", "projectSrv", "utilitySrv", "Roles", DashboardController]);
 
-function DashboardController($scope, employeeSrv, projectSrv, utilitySrv) {
+function DashboardController($scope, $uibModal, employeeSrv, projectSrv, utilitySrv, Roles) {
 
     var fetchAllocation = function ($index) {
         projectSrv.fetchAllocation($scope.employees[$index].email['S'], function (error, data) {
@@ -10,44 +10,45 @@ function DashboardController($scope, employeeSrv, projectSrv, utilitySrv) {
                 $scope.employees[$index].allocations = [700, 700, 700, 700, 700, 700, 700, 700, 700, 700];
                 if (projectsResourceData.length !== 0) {
                     angular.forEach(projectsResourceData, function (eachProjectResource) {
-
-                        for (var i = 0; i < $scope.weeks.length; i++) {
-                            findAllocationByWeek(eachProjectResource, $scope.employees[$index].email['S'], $index, $scope.weeks[i]);
-                        }
+                        angular.forEach(eachProjectResource.resources.M[$scope.employees[$index].email['S']].M.roles.L,
+                            function (employeeResource) {
+                                fetchAllocationByWeek(employeeResource.M, $index);
+                            }
+                        );
                     });
                 }
             }
         });
     };
 
-    var findAllocationByWeek = function (projectResource, email, employeeIndex, duration) {
-        projectSrv.fetchProjectDetails(projectResource.projectName['S'], function (error, data) {
-            if (!error) {
-                var projectDetails = data.Items[0];
-                var endDate = new Date(projectDetails.endDate['S']);
-                endDate.setHours(0, 0, 0, 0);
+    var fetchAllocationByWeek = function (employeeResource, employeeIndex) {
+        for (var i = 0; i < $scope.weeks.length; i++) {
+            var endDate = new Date(employeeResource.endDate['S']);
+            endDate.setHours(0, 0, 0, 0);
 
-                var allocationIndex = $scope.weeks.indexOf(duration),
-                    allocationsInWeek = $scope.employees[employeeIndex].allocations[allocationIndex],
-                    day = duration[0],
-                    weekIndex = 0;
-                while(day <= duration[6]) {
-                    if (endDate >= day) {
-                        allocationsInWeek -= parseInt(projectResource.resources.M[email].M.allocation.N);
-                    } else {
-                        allocationsInWeek -= 0;
-                    }
-                    weekIndex++;
-                    day = duration[weekIndex];
+            var startDate = new Date(employeeResource.startDate['S']);
+            startDate.setHours(0, 0, 0, 0);
+
+            var allocationIndex = i,
+                allocationsInWeek = $scope.employees[employeeIndex].allocations[allocationIndex],
+                day = $scope.weeks[i][0],
+                weekIndex = 0;
+            while(day <= $scope.weeks[i][6]) {
+                if (startDate <= day && endDate >= day) {
+                    allocationsInWeek -= parseInt(employeeResource.allocation.N);
+                } else {
+                    allocationsInWeek -= 0;
                 }
-
-                $scope.employees[employeeIndex].allocations[allocationIndex] = angular.copy(allocationsInWeek);
-
-                if (!$scope.$$phase) {
-                    $scope.$digest();
-                }
+                weekIndex++;
+                day = $scope.weeks[i][weekIndex];
             }
-        });
+
+            $scope.employees[employeeIndex].allocations[allocationIndex] = angular.copy(allocationsInWeek);
+
+            if (!$scope.$$phase) {
+                $scope.$digest();
+            }
+        }
     };
 
     var fetchEmployees = function () {
@@ -57,13 +58,14 @@ function DashboardController($scope, employeeSrv, projectSrv, utilitySrv) {
                 angular.element('.fc-bg table tbody').html('');
                 angular.forEach(employees, function (employee) {
                     employeeSrv.fetchEmployeeRoles(employee.email['S'], function (error, data) {
-                        if (!error && data.Items.length !== 1 || data.Items[0].roles['NS'][0] !== '1') {
+                        if (!error && data.Items[0].roles['NS'][0] !== '1') {
                             var employeeIndex = -1;
                             angular.forEach($scope.employees, function(emp, index) {
                                 if (emp.email['S'] === employee.email['S']) {
                                     employeeIndex = index;
                                 }
                             });
+                            employee.roles = data.Items[0].roles;
                             if (employeeIndex === -1) {
                                 $scope.employees.push(employee);
                                 fetchAllocation($scope.employees.length - 1);
@@ -75,7 +77,6 @@ function DashboardController($scope, employeeSrv, projectSrv, utilitySrv) {
                 });
             }
         });
-
     };
 
     var getWeekFromDates = function (first, last) {
@@ -127,6 +128,22 @@ function DashboardController($scope, employeeSrv, projectSrv, utilitySrv) {
         fetchWeeks(first, last, false);
     };
 
+    var roleClassNames = [
+        'dce',
+        'program-lead',
+        'strategist',
+        'sol-dir',
+        'scrum',
+        'product',
+        'arch',
+        'lead-dev',
+        'dev',
+        'build-master',
+        'ui',
+        'ux',
+        'qa'
+    ];
+
     (function () {
         $scope.dashboardSearch = '';
         $scope.predicate1 = ['-allocations', 'firstName["S"]'];
@@ -152,11 +169,49 @@ function DashboardController($scope, employeeSrv, projectSrv, utilitySrv) {
     })();
 
     $scope.getColorByAllocation = function (allocation) {
-        return utilitySrv.greenToRedColors(10 - Math.floor(Math.floor(allocation) / 10));
+        if (allocation < 0) {
+            return utilitySrv.greenToRedColors(9);
+        }
+        var index = 10 - Math.round(Math.floor(allocation) / 10);
+        if (index > 10) {
+            return 10;
+        } else {
+            return utilitySrv.greenToRedColors(index);
+        }
+    };
+
+    $scope.getPositiveAllocation = function (allocation) {
+        if (allocation < 0 ) {
+            return 100;
+        } else {
+            return allocation;
+        }
     };
 
     $scope.order = function (predicate) {
         $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
         $scope.predicate = predicate;
+    };
+
+    $scope.fetchClassForRole = function (role) {
+        return roleClassNames[parseInt(role)];
+    };
+
+    $scope.getRoleName = function (role) {
+        return Roles[parseInt(role)];
+    };
+
+    $scope.openEmployeeDetails = function (employee) {
+        var employeeCardModal = $uibModal.open({
+            animation: true,
+            templateUrl: 'templates/employee-card.tpl.html',
+            controller: "EmployeeModalController",
+            size: 'lg',
+            resolve: {
+                employee: function () {
+                    return employee;
+                }
+            }
+        });
     };
 }

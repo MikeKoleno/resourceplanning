@@ -47,6 +47,13 @@ ul.sidebar {
   padding: 15px;
 }
 
+.employee-button {
+  color: @primary-color;
+  &:active, &:hover, &:focus {
+    color: @teritary-color;
+  }
+}
+
 .employee-list {
   width: 150px;
   .employee-space {
@@ -308,21 +315,20 @@ a, button {
   margin-top: -2px;
   .resource-col {
     margin-bottom: 0;
-    height: 80px;
+    //height: 80px;
     padding: 15px;
-    .green-button {
-      margin-top: 25px;
-      display: inline-block;
+  }
+  .resource-buttons {
+    padding: 0 15px;
+    button {
+      font-size: 15px;
+      border: 2px solid @secondary-color;
+      border-radius: 4px;
+      padding: 2px 12px;
+      height: 30px;
+      background: transparent;
+      outline: none;
     }
-  }
-  .col-lg-3 {
-    width: 25%;
-  }
-  .col-lg-2 {
-    width: 20%
-  }
-  .resource-col-buttons {
-    width: 10%;
   }
 }
 
@@ -333,6 +339,122 @@ a, button {
       border-bottom: 2px solid #ddd !important;
       height: 36px;
       background: transparent;
+    }
+  }
+}
+
+.roles {
+  span {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    display: inline-block;
+    margin: 0 5px;
+  }
+  .dce {
+    background: #b5cb33;
+  }
+  .program-lead {
+    background: #7d48f8;
+  }
+  .strategist {
+    background: #845e06;
+  }
+  .sol-dir {
+    background: #212c23;
+  }
+  .scrum {
+    background: #585c84;
+  }
+  .product {
+    background: #ab716a;
+  }
+  .arch {
+    background: #1605b5;
+  }
+  .lead-dev {
+    background: #cd4138;
+  }
+  .dev {
+    background: #437174;
+  }
+  .build-master {
+    background: #fad09c;
+  }
+  .ui {
+    background: #bf00f0;
+  }
+  .ux {
+    background: #431a8e;
+  }
+  .qa {
+    background: #83ad49;
+  }
+}
+
+.employee-card {
+  color: @primary-text-color;
+  padding: 30px;
+  .row {
+    margin-bottom: 0;
+    .pull-left {
+      margin-bottom: 0;
+    }
+  }
+  .employee-info {
+    .user-icon {
+      color: @teritary-color;
+      width: 10%;
+      font-size: 80px;
+      height: 100px;
+      text-align: center;
+      i {
+        vertical-align: top;
+      }
+    }
+    .info {
+      width: 50%;
+      .name {
+        font-size: 24px;
+        font-weight: 700;
+      }
+      .email, .location {
+        b {
+          font-style: italic;
+        }
+        font-size: 15px;
+        font-weight: 400;
+      }
+    }
+    .details {
+      width: 40%;
+      b {
+        font-style: italic;
+      }
+    }
+  }
+
+  .project-info {
+    .sub-title {
+      color: @primary-text-color;
+      font-weight: 700;
+    }
+    color: @primary-text-color;
+    .icon {
+      font-size: 50px;
+      color: @teritary-color;
+      width: 60px;
+    }
+    .details {
+      padding: 10px;
+      h3 {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+      }
+      b {
+        font-style: italic;
+      }
     }
   }
 }

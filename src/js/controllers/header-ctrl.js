@@ -20,12 +20,12 @@ function headerController($rootScope, $scope, $uibModal, ngNotify) {
     $scope.openEmployeeCreateModal = function () {
         createModal = $uibModal.open({
             animation: true,
-            templateUrl: 'templates/create-modal.tpl.html',
-            controller: "CreateModalController",
+            templateUrl: 'templates/employee-create-modal.tpl.html',
+            controller: "EmployeeCreateModalController",
             size: 'lg',
             resolve: {
                 modalType: function () {
-                    return 'Employee'
+                    return 'Employee';
                 }
             }
         });
@@ -41,8 +41,8 @@ function headerController($rootScope, $scope, $uibModal, ngNotify) {
     $scope.openProjectCreateModal = function () {
         createModal = $uibModal.open({
             animation: true,
-            templateUrl: 'templates/create-modal.tpl.html',
-            controller: "CreateModalController",
+            templateUrl: 'templates/project-create-modal.tpl.html',
+            controller: "ProjectCreateModalController",
             size: 'lg',
             resolve: {
                 modalType: function () {
@@ -52,10 +52,7 @@ function headerController($rootScope, $scope, $uibModal, ngNotify) {
         });
 
         createModal.result.then(function (message) {
-            if (message === 'employee created') {
-                ngNotify.set('Employee created successfully');
-                $rootScope.$broadcast("refresh", "dashboard");
-            } else {
+            if (message === 'project created') {
                 ngNotify.set('Project created successfully');
                 $rootScope.$broadcast("refresh", "dashboard");
             }

@@ -13,6 +13,9 @@ function utilityService () {
                 return true;
             }
             return false;
+        },
+        emptyString: function () {
+            return "__EMPTY_STRING";
         }
     }
 };

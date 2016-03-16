@@ -1,0 +1,155 @@
+<div class="modal-header row">
+    <h3 class="modal-title col-lg-11">Employee</h3>
+    <a href class="col-lg-1" ng-click="closeModal()">
+        <i class="fa fa-times"></i>
+    </a>
+</div>
+<div class="modal-body employee-card">
+    <div class="row employee-info">
+        <div class="pull-left user-icon">
+            <i class="fa fa-user"></i>
+        </div>
+        <div class="pull-left info">
+            <div class="name">
+                {{employee.firstName['S']}} {{employee.lastName['S']}}
+            </div>
+            <div class="email">
+                <b>Email:</b> {{employee.email['S']}}
+            </div>
+            <div class="location">
+                <b>Location:</b> {{employee.location['S']}}
+            </div>
+        </div>
+        <div class="pull-left details">
+            <div>
+                <b>Skills:</b><br/>
+            <span ng-repeat="skill in employee.skills['L'] track by $index">
+                {{skill['S']}}<span ng-if="$index !== employee.skills['L'].length - 1">,&nbsp;</span>
+            </span>
+            </div>
+            <div>
+                <b>Interests:</b><br/>
+                <span ng-repeat="interest in employee.interests['L'] track by $index">
+                    {{interest['S']}}<span ng-if="$index !== employee.interests['L'].length - 1">,&nbsp;</span>
+                </span>
+            </div>
+            <div>
+                <b>Travel Preference:</b><br/>
+                <span>{{employee.travelPreferences['S']}}</span>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="project-info">
+        <h4 class="sub-title" ng-show="canShowCuurentProjectTitle();">CURRENT PROJECTS</h4>
+        <div class="row" ng-repeat="project in projects"
+             ng-if="!isFutureDate(project.details.startDate['S']) && !isOlderProject(project.details.endDate['S'])">
+            <div class="col-lg-6">
+                <div class="pull-left icon">
+                    <i class="fa fa-list-alt"></i>
+                </div>
+                <div class="pull-left details">
+                    <div class="name">
+                        <h3>{{project.projectName['S']}}</h3>
+                    </div>
+                    <div class="client">
+                        <b>Client: </b>
+                        <span>{{project.details.clientName['S']}}</span>
+                    </div>
+                    <div class="dce">
+                        <b>Platform: </b>
+                        <span class="" ng-repeat="platform in project.details.platForm['L'] track by $index">
+                            {{platform['S']}}<span ng-if="$index !== project.details.platForm['L'].length - 1">,&nbsp;</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 details">
+                <div class="startDate">
+                    <b>Project Start Date: </b>
+                    {{project.details.startDate['S'] | date: 'MM/dd/yyyy'}}
+                </div>
+                <div class="endDate">
+                    <b>Project End Date: </b>
+                    {{project.details.endDate['S'] | date: 'MM/dd/yyyy'}}
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Allocation</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="resource in project.resources.M[employee.email['S']].M.roles.L">
+                        <td>{{getRole(resource.M.roleId.N)}}</td>
+                        <td>{{resource.M.allocation.N}}</td>
+                        <td>{{dateFromString(resource.M.startDate.S) | date:'MM/dd/yyyy'}}</td>
+                        <td>{{dateFromString(resource.M.endDate.S) | date:'MM/dd/yyyy'}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="project-info">
+        <h4 class="sub-title" ng-show="canShowUpcomingProjectTitle();">UPCOMING PROJECTS</h4>
+        <div class="row" ng-repeat="project in projects"
+             ng-if="isFutureDate(project.details.startDate['S']) && !isOlderProject(project.details.endDate['S'])">
+            <div class="col-lg-6">
+                <div class="pull-left icon">
+                    <i class="fa fa-list-alt"></i>
+                </div>
+                <div class="pull-left details">
+                    <div class="name">
+                        <h3>{{project.projectName['S']}}</h3>
+                    </div>
+                    <div class="client">
+                        <b>Client: </b>
+                        <span>{{project.details.clientName['S']}}</span>
+                    </div>
+                    <div class="dce">
+                        <b>Platform: </b>
+                        <span class="" ng-repeat="platform in project.details.platForm['L'] track by $index">
+                            {{platform['S']}}<span ng-if="$index !== project.details.platForm['L'].length - 1">,&nbsp;</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 details">
+                <div class="startDate">
+                    <b>Project Start Date: </b>
+                    {{project.details.startDate['S'] | date: 'MM/dd/yyyy'}}
+                </div>
+                <div class="endDate">
+                    <b>Project End Date: </b>
+                    {{project.details.endDate['S'] | date: 'MM/dd/yyyy'}}
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Allocation</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="resource in project.details.resources.M[employee.email['S']].M.roles.L">
+                        <td>{{getRole(resource.M.roleId.N)}}</td>
+                        <td>{{resource.M.allocation.N}}</td>
+                        <td>{{dateFromString(resource.M.startDate.S) | date:'MM/dd/yyyy'}}</td>
+                        <td>{{dateFromString(resource.M.endDate.S) | date:'MM/dd/yyyy'}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
