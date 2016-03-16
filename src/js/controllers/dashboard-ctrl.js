@@ -199,7 +199,7 @@ function DashboardController($scope, $uibModal, employeeSrv, projectSrv, utility
     };
 
     $scope.getColorByAllocation = function (allocation) {
-        if (allocation < 0) {
+        if (allocation < 0 || allocation === 0) {
             return utilitySrv.greenToRedColors(9);
         }
         var index = 10 - Math.round(Math.floor(allocation) / 10);
@@ -211,7 +211,7 @@ function DashboardController($scope, $uibModal, employeeSrv, projectSrv, utility
     };
 
     $scope.getPositiveAllocation = function (allocation) {
-        if (allocation < 0 ) {
+        if (allocation < 0 || allocation === 0) {
             return 100;
         } else {
             return allocation;
