@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3cd02d0c-2318-458c-aea8-0688d7f100ab" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/js/controllers/employeeModal-ctrl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/js/controllers/projectCreateModal-ctrl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/templates/employee-card.tpl.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/templates/employee-create-modal.tpl.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/templates/project-create-modal.tpl.html" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/templates/create-modal.tpl.html" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/js/controllers/createModal-ctrl.js" afterPath="$PROJECT_DIR$/src/js/controllers/employeeCreateModal-ctrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js/commons/utilityService.js" afterPath="$PROJECT_DIR$/src/js/commons/utilityService.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js/controllers/dashboard-ctrl.js" afterPath="$PROJECT_DIR$/src/js/controllers/dashboard-ctrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js/controllers/header-ctrl.js" afterPath="$PROJECT_DIR$/src/js/controllers/header-ctrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/styles/index.less" afterPath="$PROJECT_DIR$/src/styles/index.less" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/templates/dashboard.tpl.html" afterPath="$PROJECT_DIR$/src/templates/dashboard.tpl.html" />
     </list>
@@ -35,21 +25,53 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="dashboard-ctrl.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="dashboard-ctrl.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/js/controllers/dashboard-ctrl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="186" column="19" selection-start-line="186" selection-start-column="19" selection-end-line="186" selection-end-column="19" />
+            <state vertical-scroll-proportion="0.5299435">
+              <caret line="180" column="26" selection-start-line="180" selection-start-column="26" selection-end-line="180" selection-end-column="26" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dashboard.tpl.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="dashboard.tpl.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/templates/dashboard.tpl.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.40610328">
-              <caret line="41" column="46" selection-start-line="41" selection-start-column="46" selection-end-line="41" selection-end-column="46" />
+            <state vertical-scroll-proportion="-14.969697">
+              <caret line="56" column="67" selection-start-line="56" selection-start-column="67" selection-end-line="56" selection-end-column="67" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.less" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/styles/index.less">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-2.7166667">
+              <caret line="72" column="27" selection-start-line="72" selection-start-column="27" selection-end-line="72" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="project-create-modal.tpl.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/templates/project-create-modal.tpl.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-2.969697">
+              <caret line="173" column="38" selection-start-line="173" selection-start-column="38" selection-end-line="173" selection-end-column="38" />
+              <folding>
+                <marker date="1458142237000" expanded="true" signature="2875:3049" placeholder="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="resourcePlanner.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/js/services/resourcePlanner.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="10" column="7" selection-start-line="10" selection-start-column="7" selection-end-line="10" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -100,15 +122,15 @@
         <option value="$PROJECT_DIR$/src/templates/employee-create-modal.tpl.html" />
         <option value="$PROJECT_DIR$/src/js/controllers/employeeCreateModal-ctrl.js" />
         <option value="$PROJECT_DIR$/src/js/controllers/header-ctrl.js" />
-        <option value="$PROJECT_DIR$/src/styles/index.less" />
         <option value="$PROJECT_DIR$/src/templates/project-create-modal.tpl.html" />
         <option value="$PROJECT_DIR$/src/js/commons/utilityService.js" />
         <option value="$PROJECT_DIR$/src/js/controllers/projectCreateModal-ctrl.js" />
         <option value="$PROJECT_DIR$/www/js/controllers/employeeModal-ctrl.js" />
         <option value="$PROJECT_DIR$/src/js/controllers/employeeModal-ctrl.js" />
         <option value="$PROJECT_DIR$/src/templates/employee-card.tpl.html" />
-        <option value="$PROJECT_DIR$/src/js/controllers/dashboard-ctrl.js" />
+        <option value="$PROJECT_DIR$/src/styles/index.less" />
         <option value="$PROJECT_DIR$/src/templates/dashboard.tpl.html" />
+        <option value="$PROJECT_DIR$/src/js/controllers/dashboard-ctrl.js" />
       </list>
     </option>
   </component>
@@ -747,14 +769,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/styles/index.less">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3890909">
-          <caret line="318" column="18" selection-start-line="318" selection-start-column="18" selection-end-line="318" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/js/controllers/header-ctrl.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.49943504">
@@ -767,14 +781,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.44067797">
           <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js/services/resourcePlanner.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2937853">
-          <caret line="10" column="7" selection-start-line="5" selection-start-column="4" selection-end-line="10" selection-end-column="7" />
           <folding />
         </state>
       </provider>
@@ -792,16 +798,6 @@
         <state vertical-scroll-proportion="0.20564972">
           <caret line="194" column="32" selection-start-line="194" selection-start-column="32" selection-end-line="194" selection-end-column="32" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/templates/project-create-modal.tpl.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2746479">
-          <caret line="208" column="30" selection-start-line="208" selection-start-column="30" selection-end-line="208" selection-end-column="30" />
-          <folding>
-            <marker date="1458142237000" expanded="true" signature="2875:3049" placeholder="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -837,18 +833,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/js/controllers/dashboard-ctrl.js">
+    <entry file="file://$PROJECT_DIR$/src/templates/project-create-modal.tpl.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.969697">
+          <caret line="173" column="38" selection-start-line="173" selection-start-column="38" selection-end-line="173" selection-end-column="38" />
+          <folding>
+            <marker date="1458142237000" expanded="true" signature="2875:3049" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js/services/resourcePlanner.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="186" column="19" selection-start-line="186" selection-start-column="19" selection-end-line="186" selection-end-column="19" />
+          <caret line="10" column="7" selection-start-line="10" selection-start-column="7" selection-end-line="10" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/styles/index.less">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.7166667">
+          <caret line="72" column="27" selection-start-line="72" selection-start-column="27" selection-end-line="72" selection-end-column="27" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/templates/dashboard.tpl.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.40610328">
-          <caret line="41" column="46" selection-start-line="41" selection-start-column="46" selection-end-line="41" selection-end-column="46" />
+        <state vertical-scroll-proportion="-14.969697">
+          <caret line="56" column="67" selection-start-line="56" selection-start-column="67" selection-end-line="56" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js/controllers/dashboard-ctrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5299435">
+          <caret line="180" column="26" selection-start-line="180" selection-start-column="26" selection-end-line="180" selection-end-column="26" />
           <folding />
         </state>
       </provider>

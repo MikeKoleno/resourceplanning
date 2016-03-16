@@ -152,6 +152,9 @@ function DashboardController($scope, $uibModal, employeeSrv, projectSrv, utility
         $scope.eventSources = [];
         $scope.employees = [];
         $scope.weeks = [];
+        $scope.selectedRole = 'All'
+
+        $scope.roles = Roles;
 
         var currDate = new Date();
         currDate.setHours(0, 0, 0, 0);
@@ -167,6 +170,33 @@ function DashboardController($scope, $uibModal, employeeSrv, projectSrv, utility
             }
         });
     })();
+
+    $scope.filterBy = function (role) {
+        console.log(role);
+        $scope.selectedRole = role;
+        if (role === '') {
+            $scope.selectedRole = 'All';
+            $scope.filterWithRole = {
+                roles: {
+                    NS: ''
+                }
+            };
+        } else {
+            for (var index in Roles) {
+                if (Roles[index] === role) {
+                    $scope.filterWithRole = {
+                        roles: {
+                            NS: index.toString()
+                        }
+                    };
+                    if (!$scope.$$phase) {
+                        $scope.$digest();
+                    }
+                    break;
+                }
+            }
+        }
+    };
 
     $scope.getColorByAllocation = function (allocation) {
         if (allocation < 0) {
