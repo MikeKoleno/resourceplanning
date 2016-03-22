@@ -16,33 +16,56 @@
                     </button>
                 </div>
                 <div class="pull-right">
-                    <input type="text" class="form-control dashboard-search" ng-model="dashboardSearchKeyword"
+                    <div class="btn-group pull-left dashboard-filter" uib-dropdown>
+                        <button type="button" class="btn form-control" uib-dropdown-toggle
+                                ng-disabled="disabled">
+                            <span class="blue-color">Filter By: </span><b>{{selectedRole}}</b>
+                            <i class="fa fa-chevron-down"></i>
+                        </button>
+                        <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                            <li role="menuitem">
+                                <a href="#"
+                                   ng-click="filterBy('')">All</a>
+                            </li>
+                            <li role="menuitem" ng-repeat="role in roles track by $index"
+                                ng-if="role !== 'Director, Client Enagagement'">
+                                <a href="#"
+                                   ng-click="filterBy(role)">{{role}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <input type="text" class="form-control dashboard-search pull-left" ng-model="dashboardSearchKeyword"
                            placeholder="Search By Name">
                 </div>
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <td></td>
-                        <td ng-repeat="eachDate in dates">{{eachDate | date: 'MM/dd'}}</td>
+                        <td width="150px"></td>
+                        <td ng-repeat="eachWeek in weeks">{{eachWeek[0] | date: 'MM/dd'}} - {{eachWeek[6] | date: 'MM/dd'}}</td>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="employee in employees | filter:dashboardSearchKeyword | orderBy:predicate2:reverse | orderBy: predicate1:reverse">
-                        <td width="100px" class="employee-card">
-                            {{employee.firstName['S']}} {{employee.lastName['S']}}
+                    <tr ng-repeat="employee in employees | filter:filterWithRole | filter:dashboardSearchKeyword | orderBy: predicate1">
+                        <td width="150px" class="employee-card">
+                            <a href="" class="employee-button" ng-click="openEmployeeDetails(employee)">{{employee.firstName['S']}} {{employee.lastName['S']}}</a>
+                            <div class="roles">
+                                <span title="{{getRoleName(employeeRole)}}"
+                                      ng-class="fetchClassForRole(employeeRole)"
+                                      ng-repeat="employeeRole in employee.roles['NS'] | orderBy: roles['NS']"></span>
+                            </div>
                         </td>
                         <td ng-repeat="allocation in employee.allocations track by $index">
-                            <span class="allocation-value">{{allocation}}</span>
+                            <span class="allocation-value">{{allocation/7 | number:0}}</span>
                             <div
                                 round-progress
                                 max="100"
-                                current="allocation"
-                                color="{{getColorByAllocation(allocation)}}"
+                                current="getPositiveAllocation(allocation/7)"
+                                color="{{getColorByAllocation(allocation/7)}}"
                                 bgcolor="#eaeaea"
                                 radius="30"
                                 stroke="5"
                                 clockwise="true"
-                                duration="800"
+                                duration="400"
                                 animation="easeInOutQuart"
                                 animation-delay="0"></div>
                         </td>

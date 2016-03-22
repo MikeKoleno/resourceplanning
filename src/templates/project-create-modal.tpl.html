@@ -1,0 +1,250 @@
+<div class="modal-header row">
+    <h3 class="modal-title col-lg-11">Create Project</h3>
+    <a href class="col-lg-1" ng-click="closeModal()">
+        <i class="fa fa-times"></i>
+    </a>
+</div>
+<div class="modal-body">
+    <form name="projectForm" novalidate ng-show="!canShowResourceForm">
+        <div class="row">
+            <!--Name-->
+            <div class="form-group col-lg-6"
+                 ng-class="{'error': projectForm.$submitted && projectForm.projectName.$error.required}">
+                <label for="projectName">Name</label>
+                <input type="text" id="projectName" ng-model="project.name" name="projectName" class="form-control"
+                       placeholder="Project Name" required>
+                <span class="error-text" ng-show="projectForm.$submitted && projectForm.projectName.$error.required">Project Name is required.</span>
+            </div>
+            <!--Platform-->
+            <div class="form-group col-lg-6"
+                 ng-class="{'error': projectForm.$submitted && projectForm.projectName === ''}">
+                <label for="platform">Type</label>
+                <div class="btn-group btn-block" uib-dropdown ng-init="project.platform = 'iOS'">
+                    <button id="platform" type="button" class="btn form-control" uib-dropdown-toggle
+                            ng-disabled="disabled">
+                        {{project.platform}} <i class="fa fa-chevron-down"></i>
+                    </button>
+                    <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                        <li role="menuitem"><a href="#"
+                                               ng-click="project.platform = 'iOS'; otherProject = false;">iOS</a></li>
+                        <li role="menuitem"><a href="#" ng-click="project.platform = 'Android'; otherProject = false;">Android</a>
+                        </li>
+                        <li role="menuitem"><a href="#"
+                                               ng-click="project.platform = 'Responsive Web'; otherProject = false;">Responsive
+                            Web</a></li>
+                        <li role="menuitem"><a href="#"
+                                               ng-click="project.platform = 'Hybrid App'; otherProject = false;">Hybrid
+                            App</a></li>
+                        <li role="menuitem"><a href="#" ng-click="project.platform = ''; otherProject = true;">Other</a>
+                        </li>
+                    </ul>
+                </div>
+                <input type="text" class="form-control" ng-Model="project.platform" ng-show="otherProject"
+                       placeholder="What kind of project is this?">
+            </div>
+            <!--Client-->
+            <div class="form-group"
+                 ng-init="showClientDropdown = true"
+                 ng-class="{'error': projectForm.$submitted && projectForm.newClient.$error.required,
+                 'col-lg-6': !showClientDropdown,
+                 'col-lg-12': showClientDropdown}">
+                <label for="client">Client</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="" class="green-button"
+                   ng-click="showClientDropdown = !showClientDropdown; project.client = '';">
+                    <i class="fa fa-plus" ng-show="showClientDropdown"></i> {{showClientDropdown ? 'Add New' :
+                    'Cancel'}}
+                </a>
+                <div class="btn-group btn-block" uib-dropdown ng-show="showClientDropdown">
+                    <button id="client" type="button" class="btn form-control" uib-dropdown-toggle
+                            ng-disabled="disabled">
+                        {{project.client}} <i class="fa fa-chevron-down"></i>
+                    </button>
+                    <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                        <li role="menuitem" ng-repeat="client in clients">
+                            <a href="#"
+                               ng-click="project.client = client.name['S'];">{{client.name['S']}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <!--Add Client-->
+                <input type="text" class="form-control" name="newClient" ng-Model="project.client"
+                       ng-show="!showClientDropdown"
+                       placeholder="Client Name" required>
+                <span class="error-text"
+                      ng-show="projectForm.$submitted && (projectForm.newClient.$error.required || project.client === '')">Client Name is required.</span>
+            </div>
+            <div class="form-group col-lg-6" ng-show="!showClientDropdown">
+                <label for="dce">DCE</label>
+                <div class="btn-group btn-block" uib-dropdown>
+                    <button id="dce" type="button" class="btn form-control" uib-dropdown-toggle
+                            ng-disabled="disabled">
+                        {{project.dce.firstName['S']}} {{project.dce.lastName['S']}} <i class="fa fa-chevron-down"></i>
+                    </button>
+                    <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                        <li role="menuitem" ng-repeat="dce in dces">
+                            <a href="#"
+                               ng-click="project.dce = dce ">{{dce.firstName['S']}} {{dce.lastName['S']}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="form-group col-lg-6">
+                <label>Start Date</label>
+                <div class="input-group btn-block calendar">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{calendarFormat}}"
+                           ng-model="project.startDate" is-open="popup1.opened"
+                           datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
+                    <div class="input-group-btn calendar-btn">
+                        <button type="button" class="btn" ng-click="open1()"><i class="fa fa-calendar"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-lg-6">
+                <label>End Date</label>
+                <div class="input-group btn-block calendar">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{calendarFormat}}"
+                           ng-model="project.endDate" is-open="popup2.opened"
+                           datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
+                    <div class="input-group-btn calendar-btn">
+                        <button type="button" class="btn" ng-click="open2()"><i class="fa fa-calendar"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!--Notes-->
+            <div class="form-group col-lg-12">
+                <label for="projectNotes">Notes</label>
+                <textarea id="projectNotes" class="form-control" ng-model="project.notes"></textarea>
+            </div>
+            <!--Submit & Cancel buttons-->
+            <div class="form-group col-lg-12 text-center">
+                <button type="submit" class="btn from-control submit-button btn-block" ng-mousedown="createProject()">
+                    CONTINUE
+                </button>
+                <a href class="cancel-button" ng-click="closeModal()">Cancel</a>
+            </div>
+        </div>
+    </form>
+    <form name="resourceForm" novalidate ng-show="canShowResourceForm">
+        <div class="row">
+            <!--Resources-->
+            <div class="form-group col-lg-12">
+                <h3>Add Resources</h3>
+                <table class="table table-striped" ng-if="resources.length !== 0">
+                    <thead>
+                    <tr>
+                        <th>Name(Email)</th>
+                        <th>Role</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Allocation</th>
+                        <th>Notes</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="resource in resources track by $index">
+                        <td>
+                            <span>{{resource.employee.name}}</span><br/>
+                            <i>({{resource.employee.email}})</i>
+                        </td>
+                        <td>{{resource.role.title}}</td>
+                        <td>{{resource.startDate | date: 'MM/dd/yyyy'}}</td>
+                        <td>{{resource.endDate | date: 'MM/dd/yyyy'}}</td>
+                        <td>{{resource.allocation}}</td>
+                        <td>{{resource.notes}}</td>
+                        <td>
+                            <a href="" class="green-button" ng-click="editResource(resource, $index)">Edit</a> |
+                            <a href="" class="green-button" ng-click="removeResource($index)">Remove</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="row resource-table">
+                    <div class="form-group col-lg-6 resource-col"
+                         ng-class="{'error': resourceFormSubmitted && resourceEmployee.name == ''}">
+                        <label>Employee</label>
+                        <div class="btn-group btn-block" uib-dropdown>
+                            <button type="button" class="btn form-control" uib-dropdown-toggle
+                                    ng-disabled="disabled">
+                                {{resourceEmployee.name}} <i class="fa fa-chevron-down"></i>
+                            </button>
+                            <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                                <li role="menuitem" ng-repeat="employee in employees"><a href="#"
+                                                                                         ng-click="resourceEmployee.name = employee.firstName['S'] + ' ' + employee.lastName['S']; resourceEmployee.email = employee.email['S'];">{{employee.firstName['S']}}
+                                    {{employee.lastName['S']}}</a></li>
+                            </ul>
+                        </div>
+                        <span class="error-text" ng-show="resourceFormSubmitted && resourceEmployee.name == ''">Please select an employee.</span>
+                    </div>
+                    <div class="form-group col-lg-6 resource-col"
+                         ng-class="{'error': resourceFormSubmitted && resourceRole.id == ''}">
+                        <label>Role</label>
+                        <div class="btn-group btn-block" uib-dropdown>
+                            <button type="button" class="btn form-control" uib-dropdown-toggle
+                                    ng-disabled="disabled">
+                                {{resourceRole.title}} <i class="fa fa-chevron-down"></i>
+                            </button>
+                            <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                                <li role="menuitem" ng-repeat="role in roles"
+                                    ng-if="role.shortTitle['S'] !== 'DCE'">
+                                    <a href="#"
+                                       ng-click="resourceRole.title = role.title['S']; resourceRole.id = role.id['N'];">{{role.title['S']}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <span class="error-text" ng-show="resourceFormSubmitted && resourceRole.title == ''">Please select a role.</span>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Start Date</label>
+                        <div class="input-group btn-block calendar">
+                            <input type="text" class="form-control" uib-datepicker-popup="{{calendarFormat}}"
+                                   ng-model="resourceStartDate" is-open="popup3.opened"
+                                   datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
+                            <div class="input-group-btn calendar-btn">
+                                <button type="button" class="btn" ng-click="open3()"><i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>End Date</label>
+                        <div class="input-group btn-block calendar">
+                            <input type="text" class="form-control" uib-datepicker-popup="{{calendarFormat}}"
+                                   ng-model="resourceEndDate" is-open="popup4.opened"
+                                   datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
+                            <div class="input-group-btn calendar-btn">
+                                <button type="button" class="btn" ng-click="open4()"><i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-6 resource-col"
+                         ng-class="{'error': resourceFormSubmitted && resourceAllocation == ''}">
+                        <label>Allocation:</label>
+                        <input type="text" class="form-control" ng-model="resourceAllocation"
+                               placeholder="Allocation (0-100)">
+                        <span class="error-text" ng-show="resourceFormSubmitted && resourceAllocation == ''">Please select a role.</span>
+                    </div>
+                    <div class="col-lg-6 resource-col">
+                        <label>Notes</label>
+                        <input type="text" class="form-control" ng-model="resourceNotes" placeholder="Add notes">
+                    </div>
+                    <div class="col-lg-12 resource-buttons">
+                        <button href="" type="submit" class="btn green-button pull-right" ng-show="!isEditing" ng-click="addNewResource()">Add Resource</button>
+                        <button href="" type="submit" class="btn green-button pull-right" ng-show="isEditing" ng-click="updateResource()">Update Resource</button>
+                    </div>
+                </div>
+            </div>
+
+            <!--Submit & Cancel buttons-->
+            <div class="form-group col-lg-12 text-center">
+                <button class="btn from-control submit-button btn-block" ng-mousedown="addResourcesToProject(project.name)">
+                    SUBMIT
+                </button>
+                <a href class="cancel-button" ng-click="closeModal()">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>

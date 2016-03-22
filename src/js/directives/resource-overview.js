@@ -11,7 +11,7 @@ function rdResourceOverview() {
             (function () {
                 $scope.employeeCount = $scope.projectsCount = 0;
 
-                employeeSrv.fetch(function (error, data) {
+                employeeSrv.fetchEmployees(function (error, data) {
                     if (!error) {
                         $scope.employeeCount = data.ScannedCount;
                     }

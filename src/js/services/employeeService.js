@@ -1,10 +1,10 @@
 angular
     .module('RDash.Services')
-    .service('employeeSrv', ['resourcePlanner', 'localStorageService', employeeService]);
+    .service('employeeSrv', ['resourcePlanner', employeeService]);
 
-function employeeService(resourcePlanner, localStorageService) {
+function employeeService(resourcePlanner) {
     return {
-        fetch: function (callback) {
+        fetchEmployees: function (callback) {
             var params = {
                 "TableName": "employee"
             };
@@ -47,6 +47,17 @@ function employeeService(resourcePlanner, localStorageService) {
         },
         assignRolesToEmployee: function (data, callback) {
             resourcePlanner.putItem(data, callback);
+        },
+        fetchSkills: function (callback) {
+            var params = {
+                TableName: "skills"
+            };
+            resourcePlanner.scan(params, callback);
+        },
+        fetchRoles: function (callback) {
+            resourcePlanner.scan({
+                TableName: 'roles'
+            }, callback);
         }
     }
 }
