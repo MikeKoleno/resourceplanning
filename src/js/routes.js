@@ -3,8 +3,10 @@
 /**
  * Route configuration for the RDash module.
  */
-angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
-    function($stateProvider, $urlRouterProvider) {
+angular.module('RDash').config(['$stateProvider', '$urlRouterProvider', '$httpProvider',
+    function($stateProvider, $urlRouterProvider, $httpProvider) {
+        //Http Interceptor Configuration Set
+        $httpProvider.interceptors.push('httpInterceptorConfig');
 
         // For unmatched routes
         $urlRouterProvider.otherwise('/');
@@ -21,8 +23,9 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
             .state('projects', {
                 url: '/projects',
                 templateProvider: function ($templateCache) {
-                    return $templateCache.get('templates/tables.tpl.html');
-                }
+                    return $templateCache.get('templates/projects-view.tpl.html');
+                },
+                controller: 'ProjectsListModalController'
             })
             .state('people', {
                 url: '/people',

@@ -1,0 +1,25 @@
+<div rd-resource-overview></div>
+<div class="projects-container">
+    <div class="row">
+
+        <div ng-repeat="project in projects | orderBy: 'startDate[\'S\']'" class="projects col-lg-4">
+            <div class="project-card">
+                <span class="pull-right resources">
+                    <i class="fa fa-users blue-color"></i>
+                    <span>{{project.resourcesCount}}</span>
+                </span>
+                <h3 class="title">
+                    <a ng-click="updateProjectSelection(project)">{{project.name['S']}}</a>
+                </h3>
+                <span class="client">{{project.clientName['S']}}</span><br/><br/>
+                <div>
+                    <b>Platform: </b><span ng-repeat="platform in project.platForm['L']">{{platform['S']}}</span><br/>
+                    <b>Start Date: </b><span>{{convertDateFromString(project.startDate['S']) | date: 'MM/dd/yyyy'}}</span><br/>
+                    <b>End Date: </b><span>{{convertDateFromString(project.endDate['S']) | date: 'MM/dd/yyyy'}}</span><br/>
+                    <b ng-if="project.notes['S'] !== undefined && project.notes['S'] !== '__EMPTY_STRING'">Notes: </b>
+                    <span ng-if="project.notes['S'] !== undefined && project.notes['S'] !== '__EMPTY_STRING'">{{project.notes['S'] | date: 'MM/dd/yyyy'}}</span><br/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
