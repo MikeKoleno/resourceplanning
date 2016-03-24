@@ -3,10 +3,13 @@
 /**
  * Route configuration for the RDash module.
  */
-angular.module('RDash').config(['$stateProvider', '$urlRouterProvider', '$httpProvider',
-    function($stateProvider, $urlRouterProvider, $httpProvider) {
+angular.module('RDash').config(['$stateProvider', '$urlRouterProvider', '$httpProvider', 'localStorageServiceProvider',
+    function($stateProvider, $urlRouterProvider, $httpProvider, localStorageServiceProvider) {
         //Http Interceptor Configuration Set
         $httpProvider.interceptors.push('httpInterceptorConfig');
+
+        //local storage service config
+        localStorageServiceProvider.setPrefix('resource');
 
         // For unmatched routes
         $urlRouterProvider.otherwise('/');

@@ -9,6 +9,23 @@ function projectEditController($scope, $filter, project, employees, dces, $uibMo
         });
     };
 
+    $scope.filteredEmployees = function (employees) {
+        return employees.filter(function (item) {
+            if (!$scope.selectedEmployee) {
+                return true;
+            } else {
+                return (item.firstName['S'].indexOf($scope.selectedEmployee) !== -1) ||
+                    (item.lastName['S'].indexOf($scope.selectedEmployee) !== -1);
+            }
+        });
+    };
+
+    $scope.onSelectedEmployee = function (employee) {
+        $scope.selectedEmployee = employee.firstName['S'] + ' ' + employee.lastName['S'];
+        $scope.resourceEmployee.name = $scope.selectedEmployee;
+        $scope.resourceEmployee.email = employee.email['S'];
+    };
+
     $scope.convertDateFromString = function (dateString) {
         return new Date(dateString);
     };
@@ -30,15 +47,17 @@ function projectEditController($scope, $filter, project, employees, dces, $uibMo
             id: 0,
             title: ""
         };
-        $scope.resourceStartDate = new Date();
-        $scope.resourceEndDate = new Date();
+        $scope.resourceStartDate = new Date($scope.editProject.startDate['S']);
+        $scope.resourceEndDate = new Date($scope.editProject.endDate['S']);
         $scope.resourceAllocation = "";
         $scope.resourceNotes = "";
         $scope.editingIndex = "";
         $scope.isEditing = false;
+        $scope.selectedEmployee = "";
     };
 
     (function () {
+        $scope.selectedEmployee = "";
         $scope.editProject = angular.copy(project);
         $scope.employees = angular.copy(employees);
         $scope.dces = angular.copy(dces);
@@ -51,8 +70,8 @@ function projectEditController($scope, $filter, project, employees, dces, $uibMo
         $scope.dateOptions = {
             dateDisabled: disabled,
             formatYear: 'yy',
-            maxDate: new Date(2020, 5, 22),
-            minDate: new Date(),
+            maxDate: new Date($scope.editProject.endDate['S']),
+            minDate: new Date($scope.editProject.startDate['S']),
             startingDay: 1
         };
 
@@ -176,6 +195,7 @@ function projectEditController($scope, $filter, project, employees, dces, $uibMo
                 }
             }
         }
+        clearResources();
     };
 
     $scope.updateResource = function () {
@@ -238,12 +258,12 @@ function projectEditController($scope, $filter, project, employees, dces, $uibMo
                         S: $scope.selectedDCE.email['S']
                     }
                 }
-            }
+            };
             projectSrv.createClient(clientParams, function (error, data) {
                 if (error) {
                     console.log(error);
                 }
-            })
+            });
         }
         var params = {
             TableName : "projects",
@@ -275,6 +295,6 @@ function projectEditController($scope, $filter, project, employees, dces, $uibMo
             } else {
                 ngNotify.set("There seems an issue with the request. Please try again", "error");
             }
-        })
+        });
     };
 }

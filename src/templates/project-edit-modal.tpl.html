@@ -144,8 +144,8 @@
                             <i>({{key}})</i>
                         </td>
                         <td>{{getRole(resource.M.roleId['N'])}}</td>
-                        <td>{{resource.M.startDate['S'] | date: 'MM/dd/yyyy'}}</td>
-                        <td>{{resource.M.endDate['S'] | date: 'MM/dd/yyyy'}}</td>
+                        <td>{{convertDateFromString(resource.M.startDate['S']) | date: 'MM/dd/yyyy'}}</td>
+                        <td>{{convertDateFromString(resource.M.endDate['S']) | date: 'MM/dd/yyyy'}}</td>
                         <td>{{resource.M.allocation['N']}}</td>
                         <td>{{resource.M.notes['S'] === '__EMPTY_STRING' ? '' : resource.M.notes['S']}}</td>
                         <td>
@@ -164,17 +164,17 @@
                  ng-if="!isEditing">
                 <label>Employee</label>
                 <div class="btn-group btn-block" uib-dropdown>
-                    <button type="button" class="btn form-control" uib-dropdown-toggle
-                            ng-disabled="disabled">
-                        {{resourceEmployee.name}} <i class="fa fa-chevron-down"></i>
-                    </button>
+                    <input type="text" ng-model="$parent.selectedEmployee" uib-dropdown-toggle
+                           class="form-control" placeholder="Type to search for an employee">
                     <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
-                        <li role="menuitem" ng-repeat="employee in employees"><a href=""
-                                                                                 ng-click="resourceEmployee.name = employee.firstName['S'] + ' ' + employee.lastName['S']; resourceEmployee.email = employee.email['S'];">{{employee.firstName['S']}}
-                            {{employee.lastName['S']}}</a></li>
+                        <li role="menuitem"
+                            ng-repeat="employee in filteredEmployees(employees)">
+                            <a href=""
+                               ng-click="onSelectedEmployee(employee)">{{employee.firstName['S']}}
+                                {{employee.lastName['S']}}</a></li>
                     </ul>
                 </div>
-                <span class="error-text" ng-show="resourceFormSubmitted && resourceEmployee.name == ''">Please select an employee.</span>
+                <span class="error-text" ng-show="resourceFormSubmitted && $parent.selectedEmployee == ''">Please select an employee.</span>
             </div>
             <div class="form-group col-lg-6 resource-col"
                  ng-class="{'error': resourceFormSubmitted && resourceRole.id == ''}">

@@ -1,19 +1,15 @@
 angular.module("RDash")
-    .controller("ProjectsListModalController", ["$scope", "$filter", "employeeSrv", "projectSrv", "Roles", "$uibModal", projectsListModalController]);
+    .controller("ProjectsListModalController", ["$scope", "$filter", "localStorageService", "employeeSrv", "projectSrv", "Roles", "$uibModal", projectsListModalController]);
 
-function projectsListModalController($scope, $filter, employeeSrv, projectSrv, Roles, $uibModal) {
+function projectsListModalController($scope, $filter, localStorageService, employeeSrv, projectSrv, Roles, $uibModal) {
     var getEmployees = function () {
-        employeeSrv.fetchEmployees(function (error, data) {
-            $scope.employees = [];
-            $scope.dces = [];
-            data.Items.map(function (item) {
-                employeeSrv.fetchEmployeeRoles(item.email['S'], function (error, data) {
-                    if (!error && data.Items.length !== 1 || data.Items[0].roles['NS'][0] !== '1') {
-                        $scope.employees.push(item);
-                    } else {
-                        $scope.dces.push(item);
-                    }
-                });
+        $scope.dces = [];
+        $scope.employees = localStorageService.get("employees");
+        $scope.employees.map(function (item) {
+            employeeSrv.fetchEmployeeRoles(item.email['S'], function (error, data) {
+                if (!error && data.Items[0].roles['NS'].indexOf('1') !== -1) {
+                    $scope.dces.push(item);
+                }
             });
         });
     };
@@ -51,6 +47,12 @@ function projectsListModalController($scope, $filter, employeeSrv, projectSrv, R
         $scope.roles = Roles;
 
         $scope.selectedEmail = $scope.edit = [];
+
+        $scope.$on("refresh", function (event, message) {
+            if (message === 'dashboard') {
+                fetchCurrentProjects();
+            }
+        });
     })();
 
     $scope.convertDateFromString = function (dateString) {
@@ -90,6 +92,6 @@ function projectsListModalController($scope, $filter, employeeSrv, projectSrv, R
             if (response === 'project updated') {
                 fetchCurrentProjects();
             }
-        })
+        });
     };
 }

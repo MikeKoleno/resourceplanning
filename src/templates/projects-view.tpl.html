@@ -9,9 +9,9 @@
                     <span>{{project.resourcesCount}}</span>
                 </span>
                 <h3 class="title">
-                    <a ng-click="updateProjectSelection(project)">{{project.name['S']}}</a>
+                    <a ng-click="updateProjectSelection(project)">{{project.clientName['S']}}</a>
                 </h3>
-                <span class="client">{{project.clientName['S']}}</span><br/><br/>
+                <span class="client">{{project.name['S']}}</span><br/><br/>
                 <div>
                     <b>Platform: </b><span ng-repeat="platform in project.platForm['L']">{{platform['S']}}</span><br/>
                     <b>Start Date: </b><span>{{convertDateFromString(project.startDate['S']) | date: 'MM/dd/yyyy'}}</span><br/>

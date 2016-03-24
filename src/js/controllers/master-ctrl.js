@@ -29,6 +29,16 @@ function MasterCtrl($scope, $state, $cookieStore, projectSrv, employeeSrv) {
 
     });
 
+    $scope.$on("spinner", function (event, message) {
+        if (message === 'show') {
+            $scope.isPageLoading = true;
+        } else {
+            $scope.isPageLoading = false;
+        }if (!$scope.$$phase) {
+            $scope.$digest();
+        }
+    });
+
     $scope.toggleSidebar = function() {
         $scope.toggle = !$scope.toggle;
         $cookieStore.put('toggle', $scope.toggle);

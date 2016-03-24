@@ -6,7 +6,7 @@ function httpInterceptorConfig($rootScope, $q, $injector) {
     var $http;
     return {
         request: function (config) {
-            $rootScope.isPageLoading = true;
+            //$rootScope.isPageLoading = true;
             return config;
         },
         requestError: function (rejection) {
@@ -15,14 +15,14 @@ function httpInterceptorConfig($rootScope, $q, $injector) {
         response: function (response) {
             $http = $http || $injector.get('$http');
             if ($http.pendingRequests.length < 1) {
-                $rootScope.isPageLoading = false;
+                //$rootScope.isPageLoading = false;
             }
             return response;
         },
         responseError: function (rejection) {
             $http = $http || $injector.get('$http');
             if ($http.pendingRequests.length < 1) {
-                $rootScope.isPageLoading = false;
+                //$rootScope.isPageLoading = false;
             }
             return $q.reject(rejection);
         }

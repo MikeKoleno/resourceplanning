@@ -19,26 +19,26 @@
             <div class="form-group col-lg-6"
                  ng-class="{'error': projectForm.$submitted && projectForm.projectName === ''}">
                 <label for="platform">Type</label>
-                <div class="btn-group btn-block" uib-dropdown ng-init="project.platform = 'iOS'">
+                <div class="btn-group btn-block" uib-dropdown ng-init="project.platform = 'iOS'" ng-show="!otherProject">
                     <button id="platform" type="button" class="btn form-control" uib-dropdown-toggle
                             ng-disabled="disabled">
                         {{project.platform}} <i class="fa fa-chevron-down"></i>
                     </button>
                     <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
-                        <li role="menuitem"><a href="#"
+                        <li role="menuitem"><a href=""
                                                ng-click="project.platform = 'iOS'; otherProject = false;">iOS</a></li>
-                        <li role="menuitem"><a href="#" ng-click="project.platform = 'Android'; otherProject = false;">Android</a>
+                        <li role="menuitem"><a href="" ng-click="project.platform = 'Android'; otherProject = false;">Android</a>
                         </li>
-                        <li role="menuitem"><a href="#"
+                        <li role="menuitem"><a href=""
                                                ng-click="project.platform = 'Responsive Web'; otherProject = false;">Responsive
                             Web</a></li>
-                        <li role="menuitem"><a href="#"
+                        <li role="menuitem"><a href=""
                                                ng-click="project.platform = 'Hybrid App'; otherProject = false;">Hybrid
                             App</a></li>
-                        <li role="menuitem"><a href="#"
+                        <li role="menuitem"><a href=""
                                                ng-click="project.platform = 'Strategy'; otherProject = false;">Strategy</a>
                         </li>
-                        <li role="menuitem"><a href="#" ng-click="project.platform = ''; otherProject = true;">Other</a>
+                        <li role="menuitem"><a href="" ng-click="project.platform = ''; otherProject = true;">Other</a>
                         </li>
                     </ul>
                 </div>
@@ -64,7 +64,7 @@
                     </button>
                     <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
                         <li role="menuitem" ng-repeat="client in clients">
-                            <a href="#"
+                            <a href=""
                                ng-click="project.client = client.name['S'];">{{client.name['S']}}</a>
                         </li>
                     </ul>
@@ -85,7 +85,7 @@
                     </button>
                     <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
                         <li role="menuitem" ng-repeat="dce in dces">
-                            <a href="#"
+                            <a href=""
                                ng-click="project.dce = dce ">{{dce.firstName['S']}} {{dce.lastName['S']}}</a>
                         </li>
                     </ul>
@@ -153,8 +153,8 @@
                             <i>({{resource.employee.email}})</i>
                         </td>
                         <td>{{resource.role.title}}</td>
-                        <td>{{resource.startDate | date: 'MM/dd/yyyy'}}</td>
-                        <td>{{resource.endDate | date: 'MM/dd/yyyy'}}</td>
+                        <td>{{convertDateFromString(resource.startDate) | date: 'MM/dd/yyyy'}}</td>
+                        <td>{{convertDateFromString(resource.endDate) | date: 'MM/dd/yyyy'}}</td>
                         <td>{{resource.allocation}}</td>
                         <td>{{resource.notes}}</td>
                         <td>
@@ -169,14 +169,14 @@
                          ng-class="{'error': resourceFormSubmitted && resourceEmployee.name == ''}">
                         <label>Employee</label>
                         <div class="btn-group btn-block" uib-dropdown>
-                            <button type="button" class="btn form-control" uib-dropdown-toggle
-                                    ng-disabled="disabled">
-                                {{resourceEmployee.name}} <i class="fa fa-chevron-down"></i>
-                            </button>
+                            <input type="text" ng-model="selectedEmployee" uib-dropdown-toggle
+                                   class="form-control" placeholder="Type to search for an employee">
                             <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
-                                <li role="menuitem" ng-repeat="employee in employees"><a href="#"
-                                                                                         ng-click="resourceEmployee.name = employee.firstName['S'] + ' ' + employee.lastName['S']; resourceEmployee.email = employee.email['S'];">{{employee.firstName['S']}}
-                                    {{employee.lastName['S']}}</a></li>
+                                <li role="menuitem"
+                                    ng-repeat="employee in filteredEmployees(employees)">
+                                    <a href=""
+                                       ng-click="onSelectedEmployee(employee)">{{employee.firstName['S']}}
+                                        {{employee.lastName['S']}}</a></li>
                             </ul>
                         </div>
                         <span class="error-text" ng-show="resourceFormSubmitted && resourceEmployee.name == ''">Please select an employee.</span>
@@ -192,7 +192,7 @@
                             <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
                                 <li role="menuitem" ng-repeat="role in roles"
                                     ng-if="role.shortTitle['S'] !== 'DCE'">
-                                    <a href="#"
+                                    <a href=""
                                        ng-click="resourceRole.title = role.title['S']; resourceRole.id = role.id['N'];">{{role.title['S']}}</a>
                                 </li>
                             </ul>
@@ -216,7 +216,7 @@
                         <div class="input-group btn-block calendar">
                             <input type="text" class="form-control" uib-datepicker-popup="{{calendarFormat}}"
                                    ng-model="resourceEndDate" is-open="popup4.opened"
-                                   datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
+                                   datepicker-options="resourceDateOptions" ng-required="true" close-text="Close"/>
                             <div class="input-group-btn calendar-btn">
                                 <button type="button" class="btn" ng-click="open4()"><i class="fa fa-calendar"></i>
                                 </button>

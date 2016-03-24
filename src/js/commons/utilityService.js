@@ -1,8 +1,8 @@
 angular
     .module('RDash.Services')
-    .service('utilitySrv', [utilityService]);
+    .service('utilitySrv', ["$rootScope", utilityService]);
 
-function utilityService () {
+function utilityService ($rootScope) {
     return {
         greenToRedColors: function (index) {
             var colorsArray = ['#007f00', '#00ab00', '#00bf00', '#00df00', '#00ff00', '#b0ff00', '#ffca00', '#ff8700', '#ff5600', '#ff0000'];

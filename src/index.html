@@ -57,6 +57,12 @@
                   <i class="fa fa-plus"></i> Project
                 </a>
               </div>
+
+              <div class="item">
+                <a href="" ng-click="employeeRecordsSync()">
+                  <i class="fa fa-plus"></i> Data Sync
+                </a>
+              </div>
             </div>
             <div class="meta">
               <div class="page">
@@ -77,7 +83,7 @@
     </div><!-- End Content Wrapper -->
   </div><!-- End Page Wrapper -->
 
-  <div class="loader" ng-show="isPageLoading">
+  <div class="loader" ng-if="isPageLoading">
     <div class="spinner">
       <i class="fa fa-user user-1"></i>
       <i class="fa fa-user user-2"></i>
