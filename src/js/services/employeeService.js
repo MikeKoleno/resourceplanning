@@ -1,14 +1,27 @@
 angular
     .module('RDash.Services')
-    .service('employeeSrv', ['resourcePlanner', employeeService]);
+    .service('employeeSrv', ['resourcePlanner', '$http', employeeService]);
 
-function employeeService(resourcePlanner) {
+function employeeService(resourcePlanner, $http) {
     return {
         fetchEmployees: function (callback) {
             var params = {
-                "TableName": "employee"
+                "TableName": "employee",
+                ScanFilter: {
+                    active: {
+                        ComparisonOperator: 'EQ',
+                        AttributeValueList: [
+                            {
+                                BOOL: true
+                            }
+                        ]
+                    }
+                }
             };
             resourcePlanner.scan(params, callback);
+        },
+        fetchImageByEmail: function (email) {
+            return $http.get("http://picasaweb.google.com/data/entry/api/user/" + email + "?alt=json");
         },
         fetchDCEs: function (callback) {
             var params = {
@@ -58,6 +71,23 @@ function employeeService(resourcePlanner) {
             resourcePlanner.scan({
                 TableName: 'roles'
             }, callback);
+        },
+        fetchMentor: function (email, callback) {
+            var params = {
+                TableName: 'mentor',
+                ScanFilter: {
+                    email: {
+                        ComparisonOperator: 'EQ',
+                        AttributeValueList: [
+                            {
+                                S: email
+                            }
+                        ]
+                    }
+                }
+            };
+
+            resourcePlanner.scan(params, callback)
         }
     }
 }

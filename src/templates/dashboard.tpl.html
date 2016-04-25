@@ -40,18 +40,23 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <td width="150px"></td>
+                        <td></td>
                         <td ng-repeat="eachWeek in weeks">{{eachWeek[0] | date: 'MM/dd'}} - {{eachWeek[6] | date: 'MM/dd'}}</td>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="employee in employees | filter:filterWithRole | filter:dashboardSearchKeyword | orderBy: predicate1">
-                        <td width="150px" class="employee-card">
-                            <a href="" class="employee-button" ng-click="openEmployeeDetails(employee)">{{employee.firstName['S']}} {{employee.lastName['S']}}</a>
-                            <div class="roles">
-                                <span title="{{getRoleName(employeeRole)}}"
-                                      ng-class="fetchClassForRole(employeeRole)"
-                                      ng-repeat="employeeRole in employee.roles['NS'] | orderBy: roles['NS']"></span>
+                        <td width="250px" class="employee-card">
+                            <div class="profile row">
+                                <div class="profile-img col-xs-6" ng-style="{ 'background-image':  'url(http://smartoffice.solstice-innovation.com/person/picture/{{employee.email.S}}?AuthType=Guest&AuthKey=busybird641@gmail.com/8182)'}"></div>
+                                <div class="profile-name col-xs-6">
+                                    <a href class="employee-button" ng-click="openEmployeeDetails(employee)">{{employee.firstName['S']}} {{employee.lastName['S']}}</a>
+                                    <div class="roles">
+                                        <span title="{{getRoleName(employeeRole)}}"
+                                              ng-class="fetchClassForRole(employeeRole)"
+                                              ng-repeat="employeeRole in employee.roles['NS'] | orderBy: roles['NS']"></span>
+                                    </div>
+                                </div>
                             </div>
                         </td>
                         <td ng-repeat="allocation in employee.allocations track by $index">
@@ -65,7 +70,7 @@
                                 radius="30"
                                 stroke="5"
                                 clockwise="true"
-                                duration="400"
+                                duration="0"
                                 animation="easeInOutQuart"
                                 animation-delay="0"></div>
                         </td>

@@ -1,7 +1,7 @@
 angular.module("RDash")
-    .controller("ProjectCreateModalController", ["$scope", "$filter", "$uibModalInstance", "employeeSrv", "projectSrv", "utilitySrv", "Roles", "ngNotify", projectCreateModalController]);
+    .controller("ProjectCreateModalController", ["$rootScope", "$scope", "$filter", "localStorageService", "$uibModalInstance", "employeeSrv", "projectSrv", "utilitySrv", "Roles", "ngNotify", projectCreateModalController]);
 
-function projectCreateModalController($scope, $filter, $uibModalInstance, employeeSrv, projectSrv, utilitySrv, Roles, ngNotify) {
+function projectCreateModalController($rootScope, $scope, $filter, localStorageService, $uibModalInstance, employeeSrv, projectSrv, utilitySrv, Roles, ngNotify) {
     var getSkills = function () {
         employeeSrv.fetchSkills(function (error, data) {
             $scope.skills = [];
@@ -18,17 +18,13 @@ function projectCreateModalController($scope, $filter, $uibModalInstance, employ
     };
 
     var getEmployees = function () {
-        employeeSrv.fetchEmployees(function (error, data) {
-            $scope.employees = [];
-            $scope.dces = [];
-            data.Items.map(function (item) {
-                employeeSrv.fetchEmployeeRoles(item.email['S'], function (error, data) {
-                    if (!error && data.Items.length !== 1 || data.Items[0].roles['NS'][0] !== '1') {
-                        $scope.employees.push(item);
-                    } else {
-                        $scope.dces.push(item);
-                    }
-                });
+        $scope.dces = [];
+        $scope.employees = localStorageService.get("employees");
+        $scope.employees.map(function (item) {
+            employeeSrv.fetchEmployeeRoles(item.email['S'], function (error, data) {
+                if (!error && data.Items[0].roles['NS'].indexOf('1') !== -1) {
+                    $scope.dces.push(item);
+                }
             });
         });
     };
@@ -55,13 +51,34 @@ function projectCreateModalController($scope, $filter, $uibModalInstance, employ
             id: 0,
             title: ""
         };
-        $scope.resourceStartDate = new Date();
-        $scope.resourceEndDate = new Date();
         $scope.resourceAllocation = "";
         $scope.resourceNotes = "";
+        $scope.selectedEmployee = "";
+        $scope.resourceStartDate = new Date($scope.project.startDate);
+        $scope.resourceEndDate = new Date($scope.project.endDate);
+        $scope.resourceDateOptions.minDate = new Date($scope.project.startDate);
+        $scope.resourceDateOptions.maxDate = new Date($scope.project.endDate);
+    };
+
+    $scope.filteredEmployees = function (employees) {
+        return employees.filter(function (item) {
+            if (!$scope.selectedEmployee) {
+                return true;
+            } else {
+                return (item.firstName['S'].indexOf($scope.selectedEmployee) !== -1) ||
+                    (item.lastName['S'].indexOf($scope.selectedEmployee) !== -1);
+            }
+        });
+    };
+
+    $scope.onSelectedEmployee = function (employee) {
+        $scope.selectedEmployee = employee.firstName['S'] + ' ' + employee.lastName['S'];
+        $scope.resourceEmployee.name = $scope.selectedEmployee;
+        $scope.resourceEmployee.email = employee.email['S'];
     };
 
     (function () {
+        $scope.selectedEmployee = "";
         $scope.canShowResourceForm = false;
         $scope.project = {};
         $scope.resources = [];
@@ -71,12 +88,17 @@ function projectCreateModalController($scope, $filter, $uibModalInstance, employ
         getEmployees();
         getRoles();
 
-        clearResources();
-
         $scope.dateOptions = {
             dateDisabled: disabled,
             formatYear: 'yy',
+            startingDay: 1
+        };
+
+        $scope.resourceDateOptions = {
+            dateDisabled: disabled,
+            formatYear: 'yy',
             minDate: new Date(),
+            maxDate: new Date(),
             startingDay: 1
         };
 
@@ -97,6 +119,8 @@ function projectCreateModalController($scope, $filter, $uibModalInstance, employ
         $scope.project.endDate = new Date();
 
         $scope.calendarFormat = "MM/dd/yyyy";
+
+        clearResources();
     })();
 
     $scope.closeModal = function () {
@@ -119,6 +143,10 @@ function projectCreateModalController($scope, $filter, $uibModalInstance, employ
         $scope.popup4.opened = true;
     };
 
+    $scope.convertDateFromString = function (dateString) {
+        return new Date(dateString);
+    };
+
     $scope.addNewResource = function () {
         $scope.resourceFormSubmitted = true;
         if (!$scope.isResourcesFilled()) {
@@ -127,14 +155,14 @@ function projectCreateModalController($scope, $filter, $uibModalInstance, employ
         $scope.resources.push({
             employee: {
                 name: $scope.resourceEmployee.name,
-                email: $scope.resourceEmployee.email
+                email: ($scope.resourceEmployee.email === '') ? 'N/A' : $scope.resourceEmployee.email
             },
             role: {
                 id: $scope.resourceRole.id,
                 title: $scope.resourceRole.title
             },
-            startDate: $scope.resourceStartDate,
-            endDate: $scope.resourceEndDate,
+            startDate: $scope.resourceStartDate.toISOString(),
+            endDate: $scope.resourceEndDate.toISOString(),
             allocation: $scope.resourceAllocation,
             notes: $scope.resourceNotes
         });
@@ -269,6 +297,11 @@ function projectCreateModalController($scope, $filter, $uibModalInstance, employ
             } else if (error) {
                 ngNotify.set("There seems an issue with the request. Please try again", 'error');
             } else {
+                $rootScope.$broadcast("refresh", "projects");
+                $scope.resourceStartDate = new Date($scope.project.startDate);
+                $scope.resourceEndDate = new Date($scope.project.endDate);
+                $scope.resourceDateOptions.minDate = new Date($scope.project.startDate);
+                $scope.resourceDateOptions.maxDate = new Date($scope.project.endDate);
                 $scope.canShowResourceForm = true;
                 if (!$scope.$$Phase) {
                     $scope.$digest();
@@ -315,8 +348,7 @@ function projectCreateModalController($scope, $filter, $uibModalInstance, employ
 
     $scope.isResourcesFilled = function () {
         var isFilled = true;
-        if (utilitySrv.isEmpty($scope.resourceEmployee.email)
-            || parseInt($scope.resourceRole.id) === 0
+        if (parseInt($scope.resourceRole.id) === 0
             || utilitySrv.isEmpty($scope.resourceAllocation)) {
             isFilled = false;
         }

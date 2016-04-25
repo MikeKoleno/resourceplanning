@@ -4,7 +4,7 @@ angular.module('RDash')
         2: 'Program Lead',
         3: 'Strategist',
         4: 'Solutions Director',
-        5: 'Scrum Master',
+        5: 'ScrumMaster',
         6: 'Product Consultant/Analyst',
         7: 'Architecture',
         8: 'Lead Developer',

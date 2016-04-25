@@ -36,6 +36,39 @@ function projectService(resourcePlanner) {
             };
             resourcePlanner.scan(params, callback);
         },
+        fetchResourcesForProject: function (projectName, callback) {
+            var params = {
+                TableName: "projectResource",
+                ScanFilter: {
+                    projectName: {
+                        ComparisonOperator:  'EQ',
+                        AttributeValueList: [
+                            {
+                                S: projectName
+                            }
+                        ]
+                    }
+                }
+            };
+            resourcePlanner.scan(params, callback);
+        },
+        fetchCurrentProjects : function (callback) {
+            var currentDate = new Date();
+            var params = {
+                TableName: 'projects',
+                ScanFilter: {
+                    endDate: {
+                        ComparisonOperator: 'GE',
+                        AttributeValueList: [
+                            {
+                                S: currentDate.toISOString()
+                            }
+                        ]
+                    }
+                }
+            };
+            resourcePlanner.scan(params, callback);
+        },
         fetchClients : function (callback) {
             var params = {
                 TableName: 'client'

@@ -1,7 +1,7 @@
 angular.module("RDash")
-    .controller("EmployeeModalController", ["$scope", "$uibModalInstance", "projectSrv", "employee", "Roles", EmployeeModalController]);
+    .controller("EmployeeModalController", ["$scope", "$uibModalInstance", "projectSrv", "employeeSrv", "employee", "Roles", EmployeeModalController]);
 
-function EmployeeModalController($scope, $uibModalInstance, projectSrv, employee, Roles) {
+function EmployeeModalController($scope, $uibModalInstance, projectSrv, employeeSrv, employee, Roles) {
 
     var fetchProjectDetails = function (projectName, index) {
         projectSrv.fetchProjectDetails(projectName, function (error, data) {
@@ -26,6 +26,11 @@ function EmployeeModalController($scope, $uibModalInstance, projectSrv, employee
 
     (function () {
         $scope.employee = employee;
+        employeeSrv.fetchMentor(employee.email.S, function (error, data) {
+            if (!error) {
+                $scope.employee.mentor =  data.Items[0].mentorFirstName['S'] + ' ' + data.Items[0].mentorLastName['S'];
+            }
+        });
         fetchProjects();
     })();
 
@@ -33,6 +38,10 @@ function EmployeeModalController($scope, $uibModalInstance, projectSrv, employee
 
     $scope.closeModal = function () {
         $uibModalInstance.dismiss();
+    };
+    
+    $scope.fetchMentor = function (email) {
+
     };
 
     $scope.fetchClassForRole = function (role) {

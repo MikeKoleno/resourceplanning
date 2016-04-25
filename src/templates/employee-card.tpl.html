@@ -7,8 +7,8 @@
 <div class="modal-body employee-card">
     <div class="row employee-info">
         <div class="pull-left user-icon">
-            <i class="fa fa-user"></i>
-        </div>
+            <!--<i class="fa fa-user"></i>-->
+            <div class="profile-img" ng-style="{ 'background-image':  'url(http://smartoffice.solstice-innovation.com/person/picture/{{employee.email.S}}?AuthType=Guest&AuthKey=busybird641@gmail.com/8182)'}"></div>        </div>
         <div class="pull-left info">
             <div class="name">
                 {{employee.firstName['S']}} {{employee.lastName['S']}}
@@ -18,6 +18,9 @@
             </div>
             <div class="location">
                 <b>Location:</b> {{employee.location['S']}}
+            </div>
+            <div class="location">
+                <b>Mentor:</b> {{employee.mentor}}
             </div>
         </div>
         <div class="pull-left details">
@@ -31,6 +34,12 @@
                 <b>Interests:</b><br/>
                 <span ng-repeat="interest in employee.interests['L'] track by $index">
                     {{interest['S']}}<span ng-if="$index !== employee.interests['L'].length - 1">,&nbsp;</span>
+                </span>
+            </div>
+            <div>
+                <b>PastProjects:</b><br/>
+                <span ng-repeat="project in employee.pastProjects['L'] track by $index">
+                    {{project['S']}}<span ng-if="$index !== employee.pastProjects['L'].length - 1">,&nbsp;</span>
                 </span>
             </div>
             <div>
