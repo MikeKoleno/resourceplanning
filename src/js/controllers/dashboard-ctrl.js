@@ -7,7 +7,7 @@ function DashboardController($rootScope, $scope, $uibModal, localStorageService,
         projectSrv.fetchAllocation($scope.employees[employeeIndex].email['S'], function (error, data) {
             if (!error) {
                 var projectsResourceData = data;
-                $scope.employees[employeeIndex].allocations = [700, 700, 700, 700, 700, 700, 700, 700, 700, 700];
+                $scope.employees[employeeIndex].allocations = [700, 700, 700, 700, 700, 700, 700, 700, 700];
                 if (projectsResourceData.length !== 0) {
                     angular.forEach(projectsResourceData, function (eachProjectResource) {
                         angular.forEach(eachProjectResource.resources.M[$scope.employees[employeeIndex].email['S']].M.roles.L,
@@ -108,14 +108,14 @@ function DashboardController($rootScope, $scope, $uibModal, localStorageService,
     var fetchWeeks = function (first, last, reverseWeek) {
         var weeks = [];
         if (!reverseWeek) {
-            for (var i = 1; i <= 10; i++) {
+            for (var i = 1; i <= 9; i++) {
                 weeks.push(getWeekFromDates(first, last));
                 first = new Date(last.setDate(last.getDate() + 1));
                 last = new Date(last.setDate(last.getDate() + 6));
             }
             $scope.weeks = weeks;
         } else {
-            for (var i = 1; i <= 10; i++) {
+            for (var i = 1; i <= 9; i++) {
                 weeks.push(getWeekFromDates(first, last));
                 first = new Date(first.setDate(first.getDate() - 7));
                 last = new Date(last.setDate(last.getDate() - 7));
@@ -137,7 +137,7 @@ function DashboardController($rootScope, $scope, $uibModal, localStorageService,
 
     $scope.showNextDates = function () {
         $rootScope.$broadcast('spinner', 'show');
-        var currDate = $scope.weeks[9][6];
+        var currDate = $scope.weeks[8][6];
 
         var first = new Date(currDate.setDate(currDate.getDate() + 1));
         var last = new Date(currDate.setDate(currDate.getDate() + 6));
@@ -271,6 +271,7 @@ function DashboardController($rootScope, $scope, $uibModal, localStorageService,
             size: 'lg',
             resolve: {
                 employee: function () {
+                    console.log(employee);
                     return employee;
                 }
             }

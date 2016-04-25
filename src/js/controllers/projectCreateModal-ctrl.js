@@ -155,7 +155,7 @@ function projectCreateModalController($rootScope, $scope, $filter, localStorageS
         $scope.resources.push({
             employee: {
                 name: $scope.resourceEmployee.name,
-                email: $scope.resourceEmployee.email
+                email: ($scope.resourceEmployee.email === '') ? 'N/A' : $scope.resourceEmployee.email
             },
             role: {
                 id: $scope.resourceRole.id,
@@ -348,8 +348,7 @@ function projectCreateModalController($rootScope, $scope, $filter, localStorageS
 
     $scope.isResourcesFilled = function () {
         var isFilled = true;
-        if (utilitySrv.isEmpty($scope.resourceEmployee.email)
-            || parseInt($scope.resourceRole.id) === 0
+        if (parseInt($scope.resourceRole.id) === 0
             || utilitySrv.isEmpty($scope.resourceAllocation)) {
             isFilled = false;
         }

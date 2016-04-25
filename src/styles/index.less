@@ -65,6 +65,7 @@ ul.sidebar {
 
 .employee-button {
   color: @primary-color;
+  display: inline-block;
   &:active, &:hover, &:focus {
     color: @teritary-color;
   }
@@ -449,16 +450,17 @@ a, button {
   .employee-info {
     .user-icon {
       color: @teritary-color;
-      width: 10%;
+      width: 13%;
       font-size: 80px;
       height: 100px;
       text-align: center;
-      i {
-        vertical-align: top;
+      .profile-img {
+        width: 120px;
+        height: 120px;
       }
     }
     .info {
-      width: 50%;
+      width: 47%;
       .name {
         font-size: 24px;
         font-weight: 700;
@@ -566,32 +568,31 @@ a, button {
   }
 }
 
-.project-edit-form {
-  .tabs {
-    margin-bottom: 0;
-    li.active {
-      a {
-        border: 2px solid @teritary-color;
-        border-bottom-color: #fff;
+.tabs {
+  margin-bottom: 0;
+  background: white;
+  li.active {
+    a {
+      border: 2px solid @teritary-color !important;
+      border-bottom-color: #fff !important;;
+      color: @secondary-color;
+      &:active, &:hover, &:focus {
+        border: 2px solid @teritary-color !important;;
+        border-bottom-color: #fff !important;;
         color: @secondary-color;
-        &:active, &:hover, &:focus {
-          border: 2px solid @teritary-color;
-          border-bottom-color: #fff;
-          color: @secondary-color;
-          background: transparent;
-        }
+        background: transparent;
       }
     }
-    li {
-      a {
-        border-bottom: 2px solid @teritary-color;
-        color: @primary-text-color;
-        &:active, &:hover, &:focus {
-          border: 0;
-          border-bottom: 2px solid @teritary-color;
-          color: @secondary-color;
-          background: transparent;
-        }
+  }
+  li {
+    a {
+      border-bottom: 2px solid @teritary-color !important;;
+      color: @primary-text-color;
+      &:active, &:hover, &:focus {
+        border: 0;
+        border-bottom: 2px solid @teritary-color !important;;
+        color: @secondary-color;
+        background: transparent;
       }
     }
   }
@@ -653,4 +654,50 @@ a, button {
   40% {
     width: 24px;
   }
+}
+
+.profile-img {
+  width: 80px;
+  height: 80px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+}
+
+.profile-name {
+  color: @teritary-color;
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+}
+
+.projects-container {
+  margin: 20px;
+  .tab-content {
+    padding: 15px;
+    border: 2px solid @teritary-color !important;
+    border-top: #fff !important;
+  }
+}
+
+.ribbon{
+  position: absolute;
+  top: 0;
+  right: 45px;
+  z-index: 1;
+  cursor: pointer;
+  -webkit-transition: line-height 0.5s;
+  transition: line-height 0.5s;
+}
+.ribbon:after {
+  content: "";
+  font-size: 10px;
+  position: absolute;
+  height: 8px;
+  border: 12px solid @secondary-color;
+  z-index: -1;
+  border-bottom-color: transparent;
+  right: 0;
+  -webkit-transition: height 0.5s;
+  transition: height 0.5s;
 }

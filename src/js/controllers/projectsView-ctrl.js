@@ -22,7 +22,11 @@ function projectsListModalController($scope, $filter, localStorageService, emplo
                     item.resourcesCount = 0;
                     data.Items.map(function (resourceItem) {
                         item.resources = resourceItem.resources;
+                        item.isStaffingPending = false;
                         for (var key in resourceItem.resources.M) {
+                            if (key === 'N/A') {
+                                item.isStaffingPending = true;
+                            }
                             for (var roleIndex in resourceItem.resources.M[key].M.roles.L) {
                                 var endDate = new Date(resourceItem.resources.M[key].M.roles.L[roleIndex].M.endDate['S']);
                                 if (endDate > new Date()) {
@@ -45,6 +49,7 @@ function projectsListModalController($scope, $filter, localStorageService, emplo
         getEmployees();
         fetchCurrentProjects();
         $scope.roles = Roles;
+        $scope.selectedType = 'staff';
 
         $scope.selectedEmail = $scope.edit = [];
 
@@ -54,6 +59,18 @@ function projectsListModalController($scope, $filter, localStorageService, emplo
             }
         });
     })();
+
+    $scope.setType = function (type) {
+        $scope.selectedType = type;
+    };
+
+    $scope.showProjects = function (item) {
+        if ($scope.selectedType === 'archive') {
+            return new Date(item.startDate['S']) <= new Date();
+        } else {
+            return new Date(item.startDate['S']) > new Date();
+        }
+    };
 
     $scope.convertDateFromString = function (dateString) {
         return new Date(dateString);

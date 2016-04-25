@@ -25,6 +25,13 @@ function projectEditController($scope, $filter, project, employees, dces, $uibMo
         $scope.resourceEmployee.name = $scope.selectedEmployee;
         $scope.resourceEmployee.email = employee.email['S'];
     };
+    
+    $scope.onSelectedNewEmployee = function (employee) {
+        $scope.selectedNewEmployee = {
+            name: employee.firstName['S'] + ' ' + employee.lastName['S'],
+            email: employee.email['S']
+        };
+    };
 
     $scope.convertDateFromString = function (dateString) {
         return new Date(dateString);
@@ -54,6 +61,27 @@ function projectEditController($scope, $filter, project, employees, dces, $uibMo
         $scope.editingIndex = "";
         $scope.isEditing = false;
         $scope.selectedEmployee = "";
+        $scope.isUpdating = false;
+    };
+
+    $scope.isCurrentProject = function (startDate) {
+        var projStartDate = new Date(startDate);
+        if (projStartDate > new Date()) {
+            $scope.predicate = 'upcoming';
+            $scope.active = 1;
+        } else {
+            $scope.predicate = 'current';
+            $scope.active = 0;
+        }
+    };
+
+    $scope.isFutureProject = function (startDate) {
+        var projStartDate = new Date(startDate);
+        if (projStartDate > new Date()) {
+            return true;
+        } else {
+            return false;
+        }
     };
 
     (function () {
@@ -95,6 +123,9 @@ function projectEditController($scope, $filter, project, employees, dces, $uibMo
     };
 
     $scope.getEmployeeByEmail = function (employeeEmail) {
+        if (employeeEmail == "") {
+            return "";
+        }
         var employee = $filter("filter")($scope.employees, {email: {S: employeeEmail}})[0];
         return employee.firstName['S'] + " " + employee.lastName["S"];
     };
@@ -125,6 +156,37 @@ function projectEditController($scope, $filter, project, employees, dces, $uibMo
     $scope.open4 = function() {
         $scope.popup4.opened = true;
     };
+
+    $scope.addEmployeeToResource = function (email, $index) {
+        if (email !== undefined) {
+            var resource = $scope.editProject.resources.M['N/A'].M.roles.L[$index].M;
+
+            $scope.editProject.resources.M['N/A'].M.roles.L.splice($index, 1);
+
+            if ($scope.editProject.resources.M['N/A'].M.roles.L.length === 0) {
+                delete $scope.editProject.resources.M['N/A'];
+            }
+            if ($scope.editProject.resources.M[email] === undefined) {
+                $scope.editProject.resources.M[email] = {
+                    M: {
+                        roles: {
+                            L: [
+                                {
+                                    M: resource
+                                }
+                            ]
+                        }
+                    }
+                }
+            } else {
+                $scope.editProject.resources.M[email].M.roles.L.push({M: resource});
+            }
+            $scope.selectedNewEmployee = {
+                name: '',
+                email: ''
+            };
+        }
+    };
     
     $scope.editResource = function (email, $index) {
         var resource = $scope.editProject.resources.M[email].M.roles.L[$index].M;
@@ -141,7 +203,11 @@ function projectEditController($scope, $filter, project, employees, dces, $uibMo
         $scope.resourceAllocation = resource.allocation['N'];
         $scope.resourceNotes = (utilitySrv.isEmpty(resource.notes['S']) || resource.notes['S'] === utilitySrv.emptyString()) ? "" : resource.notes['S'];
         $scope.editingIndex = $index;
-        $scope.isEditing = true;
+        if (email !== '') {
+            $scope.isEditing = true;
+        }
+        
+        $scope.isUpdating = true;
     };
 
     $scope.addNewResource = function () {
@@ -162,7 +228,7 @@ function projectEditController($scope, $filter, project, employees, dces, $uibMo
                 S: utilitySrv.isEmpty($scope.resourceNotes ) ? utilitySrv.emptyString() : $scope.resourceNotes
             }
         };
-        var email = $scope.resourceEmployee.email;
+        var email = ($scope.resourceEmployee.email === '') ? 'N/A' : $scope.resourceEmployee.email;
         if (utilitySrv.isEmpty($scope.editProject.resources)) {
             $scope.editProject.resources = { M: {}};
             $scope.editProject.resources['M'][email] = {
@@ -178,7 +244,7 @@ function projectEditController($scope, $filter, project, employees, dces, $uibMo
             }
         } else {
             if (!utilitySrv.isEmpty($scope.editProject.resources['M'][email]) && $scope.editProject.resources['M'][email].M.roles.L.length > 0) {
-                $scope.editProject.resources.M[$scope.resourceEmployee.email].M.roles.L.push({
+                $scope.editProject.resources.M[email].M.roles.L.push({
                     M: resource
                 });
             } else {
@@ -223,6 +289,14 @@ function projectEditController($scope, $filter, project, employees, dces, $uibMo
 
     $scope.retireResource = function (email, $index) {
         $scope.editProject.resources.M[email].M.roles.L[$index].M.endDate["S"] = (new Date()).toISOString();
+    };
+
+    $scope.removeResource = function (email, $index) {
+        $scope.editProject.resources.M[email].M.roles.L.splice($index, 1);
+
+        if ($scope.editProject.resources.M[email].M.roles.L.length === 0) {
+            delete $scope.editProject.resources.M[email];
+        }
     };
 
     var updateProjectResources = function (projectName) {

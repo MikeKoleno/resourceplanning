@@ -10,10 +10,9 @@ function rdResourceOverview() {
         controller: function ($scope, employeeSrv, projectSrv) {
             (function () {
                 $scope.employeeCount = $scope.projectsCount = 0;
-
                 employeeSrv.fetchEmployees(function (error, data) {
                     if (!error) {
-                        $scope.employeeCount = data.ScannedCount;
+                        $scope.employeeCount = data.Count;
                     }
                 });
 

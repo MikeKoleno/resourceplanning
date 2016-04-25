@@ -149,8 +149,10 @@
                     <tbody>
                     <tr ng-repeat="resource in resources track by $index">
                         <td>
-                            <span>{{resource.employee.name}}</span><br/>
-                            <i>({{resource.employee.email}})</i>
+                            <span ng-if="resource.employee.email !== 'N/A'">
+                                <span>{{resource.employee.name}}</span><br/>
+                                <i>({{resource.employee.email}})</i>
+                            </span>
                         </td>
                         <td>{{resource.role.title}}</td>
                         <td>{{convertDateFromString(resource.startDate) | date: 'MM/dd/yyyy'}}</td>

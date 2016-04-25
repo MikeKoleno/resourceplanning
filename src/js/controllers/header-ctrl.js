@@ -46,6 +46,9 @@ function headerController($rootScope, $scope, resourcePlanner, localStorageServi
                 },
                 lastName: {
                     S: employee.lastName
+                },
+                active: {
+                    BOOL: true
                 }
             }
         };
@@ -68,7 +71,7 @@ function headerController($rootScope, $scope, resourcePlanner, localStorageServi
 
         resourcePlanner.putItem(params, function (err, data) {
             if (err) {
-                console.log(err);
+                console.error(err);
             }
         });
     };
@@ -78,7 +81,6 @@ function headerController($rootScope, $scope, resourcePlanner, localStorageServi
             return;
         }
         var roles = employeeRecordsSync.setRoles(employee.role, employee.title);
-        console.log(roles);
         if (roles.length !== 0) {
             var rolesParam = {
                 TableName: "employeeRoles",
